@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,16 +14,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LogArchive
+namespace LogArchive.Views
 {
 	/// <summary>
 	/// MainWindow.xaml에 대한 상호 작용 논리
 	/// </summary>
-	public partial class MainWindow : Window
+	partial class MainWindow
 	{
+		public static MainWindow Current { get; private set; }
 		public MainWindow()
 		{
 			InitializeComponent();
+			Current = this;
+		}
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
 		}
 	}
 }
