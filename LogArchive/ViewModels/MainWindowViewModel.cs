@@ -77,6 +77,8 @@ namespace LogArchive.ViewModels
 		}
 		public void csvtobin()
 		{
+			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Bin"));
 			#region ItemBuild구역
 			var csvPath = Path.Combine(MainFolder, "ItemBuildLog.csv");
 			if (File.Exists(csvPath))
