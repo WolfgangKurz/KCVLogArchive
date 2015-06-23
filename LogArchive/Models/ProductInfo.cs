@@ -78,9 +78,6 @@ namespace LogArchive.Models
 					new Library("Interactive Extensions", new Uri("http://rx.codeplex.com/")),
 					new Library("Windows API Code Pack", new Uri("http://archive.msdn.microsoft.com/WindowsAPICodePack")),
 					new Library("Livet", new Uri("http://ugaya40.net/livet")),
-					new Library("DynamicJson", new Uri("http://dynamicjson.codeplex.com/")),
-					new Library("FiddlerCore", new Uri("http://fiddler2.com/fiddlercore")),
-					new Library("NAudio", new Uri("http://naudio.codeplex.com/")),
 				});
 			}
 		}

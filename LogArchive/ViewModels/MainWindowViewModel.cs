@@ -1,12 +1,7 @@
-﻿using LogArchive.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models;
+using System.Collections.Generic;
 using System.IO;
-using System.Windows;
 
 namespace LogArchive.ViewModels
 {
@@ -281,7 +276,7 @@ namespace LogArchive.ViewModels
 			{
 				while (memoryStream.Position < memoryStream.Length)
 				{
-					items.Add(new ItemStringLists
+					var item = new ItemStringLists
 					{
 						Date = reader.ReadString(),
 						Results = reader.ReadString(),
@@ -290,18 +285,21 @@ namespace LogArchive.ViewModels
 						Bullet = reader.ReadInt32(),
 						Steel = reader.ReadInt32(),
 						bauxite = reader.ReadInt32(),
-					});
+					};
+					item.Results=KanColleClient.Current.Translations.GetTranslation(item.Results, TranslationType.Equipment, true);
+					item.Assistant=KanColleClient.Current.Translations.GetTranslation(item.Assistant, TranslationType.ShipTypes, true);
+					items.Add(item);
 				}
 				memoryStream.Dispose();
 				memoryStream.Close();
 				reader.Dispose();
 				reader.Close();
 			}
-			int i = items.Count-400;
-			if(i<=0) return items;
+			int i = items.Count - 400;
+			if (i <= 0) return items;
 			else
 			{
-				items.RemoveRange(0,i);
+				items.RemoveRange(0, i);
 				return items;
 			}
 		}
@@ -314,7 +312,7 @@ namespace LogArchive.ViewModels
 			{
 				while (memoryStream.Position < memoryStream.Length)
 				{
-					items.Add(new BuildStirngLists
+					var item = new BuildStirngLists
 					{
 						Date = reader.ReadString(),
 						Results = reader.ReadString(),
@@ -323,7 +321,9 @@ namespace LogArchive.ViewModels
 						Steel = reader.ReadInt32(),
 						bauxite = reader.ReadInt32(),
 						UseItems = reader.ReadInt32(),
-					});
+					};
+					item.Results = KanColleClient.Current.Translations.GetTranslation(item.Results, TranslationType.Ships, true);
+					items.Add(item);
 				}
 				memoryStream.Dispose();
 				memoryStream.Close();
@@ -347,14 +347,17 @@ namespace LogArchive.ViewModels
 			{
 				while (memoryStream.Position < memoryStream.Length)
 				{
-					items.Add(new DropStringLists
+					var item = new DropStringLists
 					{
 						Date = reader.ReadString(),
 						Drop = reader.ReadString(),
 						SeaArea = reader.ReadString(),
 						EnemyFleet = reader.ReadString(),
 						Rank = reader.ReadString(),
-					});
+					};
+					item.SeaArea=KanColleClient.Current.Translations.GetTranslation(item.SeaArea, TranslationType.OperationMaps, true);
+					item.EnemyFleet = KanColleClient.Current.Translations.GetTranslation(item.EnemyFleet, TranslationType.OperationSortie, true);
+					items.Add(item);
 				}
 				memoryStream.Dispose();
 				memoryStream.Close();

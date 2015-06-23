@@ -239,8 +239,12 @@
 						</FlowDocument>
 					</FlowDocumentScrollViewer>
 				</Grid>
-				<StackPanel Margin="0,10,0,0" Grid.Row="1"
-							Visibility="{Binding ElementName=ItemTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<Grid Margin="0,10,0,0" Grid.Row="1" Visibility="{Binding ElementName=ItemTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+							
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
 												 HorizontalAlignment="Left"
@@ -253,9 +257,8 @@
 												 MethodName="csvtobin"/>
 					</StackPanel>
 					<ListView ItemsSource="{Binding ItemLists}"
-					  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
-					  Height="400"
-					  >
+							  Grid.Row="1"
+							  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}">
 						<ListView.Resources>
 							<Style TargetType="{x:Type TextBlock}">
 								<Setter Property="Margin"
@@ -374,9 +377,13 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
-				</StackPanel>
-				<StackPanel Margin="0,10,0,0" Grid.Row="1" 
+				</Grid>
+				<Grid Margin="0,10,0,0" Grid.Row="1" 
 							Visibility="{Binding ElementName=BuildTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
 												 HorizontalAlignment="Left"
@@ -389,9 +396,8 @@
 												 MethodName="csvtobin"/>
 					</StackPanel>
 					<ListView ItemsSource="{Binding BuildLists}"
-					  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
-					  Height="400"
-					  >
+							  Grid.Row="1"
+					  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}">
 						<ListView.Resources>
 							<Style TargetType="{x:Type TextBlock}">
 								<Setter Property="Margin"
@@ -510,9 +516,13 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
-				</StackPanel>
-				<StackPanel Margin="0,10,0,0" Grid.Row="1"
+				</Grid>
+				<Grid Margin="0,10,0,0" Grid.Row="1"
 							Visibility="{Binding ElementName=DropTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
 												 HorizontalAlignment="Left"
@@ -525,9 +535,8 @@
 												 MethodName="csvtobin"/>
 					</StackPanel>
 					<ListView ItemsSource="{Binding DropLists}"
-					  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
-					  Height="400"
-					  >
+							  Grid.Row="1"
+					  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}">
 						<ListView.Resources>
 							<Style TargetType="{x:Type TextBlock}">
 								<Setter Property="Margin"
@@ -626,7 +635,7 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
-				</StackPanel>
+				</Grid>
 
 			</Grid>
 		</Grid>

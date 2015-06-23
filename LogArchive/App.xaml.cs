@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using Grabacr07.KanColleWrapper;
 
 namespace LogArchive
 {
@@ -30,7 +31,7 @@ namespace LogArchive
 			ProductInfo = new ProductInfo();
 
 			ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
-			
+			KanColleClient.Current.Translations.EnableTranslations = true;
 
 
 			ViewModelRoot = new MainWindowViewModel();
