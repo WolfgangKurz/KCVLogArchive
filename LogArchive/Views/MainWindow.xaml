@@ -14,7 +14,7 @@
 				   xmlns:controls="clr-namespace:LogArchive.Views.Controls"
 				   mc:Ignorable="d"
 				   Title="{Binding Title}" 
-				   Height="604" 
+				   Height="676" 
 				   Width="800"
 				   IsRestoringWindowPlacement="True"
 				   SnapsToDevicePixels="True"
@@ -211,11 +211,6 @@
 								<Run Text=".bin파일변환은 매번 할 필요없습니다. bin파일은 csv파일과 동일하게 작성됩니다." />
 							</Paragraph>
 							<Paragraph Language="ko-KR">
-								<Run Text="현재는 가장 최근 결과중 최대 400건만 불러오도록 되어있습니다." />
-								<LineBreak />
-								<Run Text="더 이전의 결과를 보시려면 Microsoft Excel등의 스프레트시트 프로그램으로 .csv파일을 열어서 조회해주시기 바랍니다."/>
-								<LineBreak />
-								<LineBreak />
 								<Run Text="Project home:" />
 								<metro2:HyperlinkEx Uri="http://KanColleViewerKr.tk">
 									<Run Text="http://KanColleViewerKr.tk" />
@@ -239,12 +234,15 @@
 						</FlowDocument>
 					</FlowDocumentScrollViewer>
 				</Grid>
-				<Grid Margin="0,10,0,0" Grid.Row="1" Visibility="{Binding ElementName=ItemTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+				<Grid Margin="0,10,0,0" Grid.Row="1" 
+					  Visibility="{Binding ElementName=ItemTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
-						<RowDefinition/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
-							
+
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
 												 HorizontalAlignment="Left"
@@ -377,12 +375,62 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
+					<Grid Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<metro2:CallMethodButton MethodName="ItemGoBack"
+												 Height="30"
+												 Style="{DynamicResource CircleButtonStyleKey}"
+												 ToolTip="전 페이지로 이동">
+							<Viewbox Margin="5">
+								<Path Data="M17.358398,14.795208 L22.22168,14.795208 L17.109375,20.0247 L28.227539,20.0247 L28.227539,23.657513 L17.109375,23.657513 L22.22168,28.887005 L17.358398,28.887005 L10.649414,21.870403 L10.649414,21.81181 z"
+									  Stretch="Uniform"
+									  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+							</Viewbox>
+						</metro2:CallMethodButton>
+						<metro:PromptTextBox Grid.Column="1"
+								 Prompt=""
+								 Width="30"
+								 Margin="10,0">
+							<metro:PromptTextBox.Text>
+								<Binding Path="ItemPages"
+										 UpdateSourceTrigger="PropertyChanged">
+									<Binding.ValidationRules>
+										<metro:Int32Rule Min="0"/>
+									</Binding.ValidationRules>
+								</Binding>
+							</metro:PromptTextBox.Text>
+
+						</metro:PromptTextBox>
+
+						<TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0">
+							<Run Text="/"/>
+							<Run Text="{Binding ItemMaxPage}"/>
+						</TextBlock>
+						<metro2:CallMethodButton Grid.Column="3"
+								 MethodName="ItemGoForward"
+								 Height="30"
+								 Margin="2,0"
+								 Style="{DynamicResource CircleButtonStyleKey}"
+								 ToolTip="앞 페이지로 이동">
+							<Viewbox Margin="5">
+								<Path Data="M17.387695,14.795208 L22.250977,14.795208 L28.959961,21.81181 L28.959961,21.870403 L22.250977,28.887005 L17.387695,28.887005 L22.5,23.657513 L11.381836,23.657513 L11.381836,20.0247 L22.5,20.0247 z"
+									  Stretch="Uniform"
+									  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+							</Viewbox>
+						</metro2:CallMethodButton>
+					</Grid>
 				</Grid>
 				<Grid Margin="0,10,0,0" Grid.Row="1" 
 							Visibility="{Binding ElementName=BuildTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
-						<RowDefinition/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
@@ -516,12 +564,62 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
+					<Grid Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<metro2:CallMethodButton MethodName="BuildGoBack"
+												 Height="30"
+												 Style="{DynamicResource CircleButtonStyleKey}"
+												 ToolTip="전 페이지로 이동">
+							<Viewbox Margin="5">
+								<Path Data="M17.358398,14.795208 L22.22168,14.795208 L17.109375,20.0247 L28.227539,20.0247 L28.227539,23.657513 L17.109375,23.657513 L22.22168,28.887005 L17.358398,28.887005 L10.649414,21.870403 L10.649414,21.81181 z"
+									  Stretch="Uniform"
+									  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+							</Viewbox>
+						</metro2:CallMethodButton>
+						<metro:PromptTextBox Grid.Column="1"
+								 Prompt=""
+								 Width="30"
+								 Margin="10,0">
+							<metro:PromptTextBox.Text>
+								<Binding Path="BuildPages"
+							 UpdateSourceTrigger="PropertyChanged">
+									<Binding.ValidationRules>
+										<metro:Int32Rule Min="0"/>
+									</Binding.ValidationRules>
+								</Binding>
+							</metro:PromptTextBox.Text>
+
+						</metro:PromptTextBox>
+
+						<TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0">
+							<Run Text="/"/>
+							<Run Text="{Binding BuildMaxPage}"/>
+						</TextBlock>
+						<metro2:CallMethodButton Grid.Column="3"
+												 MethodName="BuildGoForward"
+												 Height="30"
+												 Margin="2,0"
+												 Style="{DynamicResource CircleButtonStyleKey}"
+												 ToolTip="앞 페이지로 이동">
+							<Viewbox Margin="5">
+								<Path Data="M17.387695,14.795208 L22.250977,14.795208 L28.959961,21.81181 L28.959961,21.870403 L22.250977,28.887005 L17.387695,28.887005 L22.5,23.657513 L11.381836,23.657513 L11.381836,20.0247 L22.5,20.0247 z"
+									  Stretch="Uniform"
+									  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+							</Viewbox>
+						</metro2:CallMethodButton>
+					</Grid>
 				</Grid>
 				<Grid Margin="0,10,0,0" Grid.Row="1"
 							Visibility="{Binding ElementName=DropTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition/>
+						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
@@ -635,8 +733,56 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
-				</Grid>
+					<Grid Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<metro2:CallMethodButton MethodName="DropGoBack"
+								 Height="30"
+								 Style="{DynamicResource CircleButtonStyleKey}"
+								 ToolTip="전 페이지로 이동">
+							<Viewbox Margin="5">
+								<Path Data="M17.358398,14.795208 L22.22168,14.795208 L17.109375,20.0247 L28.227539,20.0247 L28.227539,23.657513 L17.109375,23.657513 L22.22168,28.887005 L17.358398,28.887005 L10.649414,21.870403 L10.649414,21.81181 z"
+					  Stretch="Uniform"
+					  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+							</Viewbox>
+						</metro2:CallMethodButton>
+						<metro:PromptTextBox Grid.Column="1"
+								 Prompt=""
+								 Width="30"
+								 Margin="10,0">
+							<metro:PromptTextBox.Text>
+								<Binding Path="DropPages"
+							 UpdateSourceTrigger="PropertyChanged">
+									<Binding.ValidationRules>
+										<metro:Int32Rule Min="0"/>
+									</Binding.ValidationRules>
+								</Binding>
+							</metro:PromptTextBox.Text>
 
+						</metro:PromptTextBox>
+
+						<TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0">
+							<Run Text="/"/>
+							<Run Text="{Binding DropMaxPage}"/>
+						</TextBlock>
+						<metro2:CallMethodButton Grid.Column="3"
+												 MethodName="DropGoForward"
+												 Height="30"
+												 Margin="2,0"
+												 Style="{DynamicResource CircleButtonStyleKey}"
+												 ToolTip="앞 페이지로 이동">
+							<Viewbox Margin="5">
+								<Path Data="M17.387695,14.795208 L22.250977,14.795208 L28.959961,21.81181 L28.959961,21.870403 L22.250977,28.887005 L17.387695,28.887005 L22.5,23.657513 L11.381836,23.657513 L11.381836,20.0247 L22.5,20.0247 z"
+									  Stretch="Uniform"
+									  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+							</Viewbox>
+						</metro2:CallMethodButton>
+					</Grid>
+				</Grid>
 			</Grid>
 		</Grid>
 		<Grid Grid.Row="2"
