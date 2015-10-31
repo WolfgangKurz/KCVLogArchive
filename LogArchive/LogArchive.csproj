@@ -45,7 +45,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\KanColleViewer.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="KanColleWrapper, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="KanColleWrapper, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\KanColleWrapper.dll</HintPath>
     </Reference>
@@ -53,22 +53,24 @@
       <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\Livet.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance, Version=0.1.0.34025, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MetroRadiance, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\MetroRadiance.dll</HintPath>
     </Reference>
-    <Reference Include="MetroRadiance.Chrome, Version=0.1.0.34024, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MetroRadiance.Chrome, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\MetroRadiance.Chrome.dll</HintPath>
     </Reference>
-    <Reference Include="MetroRadiance.Core, Version=0.1.0.34023, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MetroRadiance.Core, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\MetroRadiance.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MetroTrilithon">
+    <Reference Include="MetroTrilithon, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\MetroTrilithon.dll</HintPath>
     </Reference>
-    <Reference Include="MetroTrilithon.Desktop">
+    <Reference Include="MetroTrilithon.Desktop, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\KanColleViewerAssemblies\MetroTrilithon.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
