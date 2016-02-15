@@ -215,16 +215,6 @@
   <ItemGroup>
     <Resource Include="Assets\app.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="KanColleViewerAssemblies\Desktop.Metro.dll" />
-    <Content Include="KanColleViewerAssemblies\KanColleViewer.Composition.dll" />
-    <Content Include="KanColleViewerAssemblies\KanColleViewer.Controls.dll" />
-    <Content Include="KanColleViewerAssemblies\KanColleViewer.exe" />
-    <Content Include="KanColleViewerAssemblies\KanColleWrapper.dll" />
-    <Content Include="KanColleViewerAssemblies\MetroRadiance.Chrome.dll" />
-    <Content Include="KanColleViewerAssemblies\MetroRadiance.Core.dll" />
-    <Content Include="KanColleViewerAssemblies\MetroRadiance.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
