@@ -15,7 +15,6 @@ namespace LogArchive.Models
 	/// </summary>
 	public class DropStringLists
 	{
-		public int Id { get; set; }
 		public string Date { get; set; }
 		public string SeaArea { get; set; }
 		public string MapInfo { get; set; }
@@ -23,7 +22,7 @@ namespace LogArchive.Models
 		public string Rank { get; set; }
 		public string Drop { get; set; }
 
-		public void CopyBattleData(int id)
+		public void CopyBattleData(string date)
 		{
 			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
@@ -31,7 +30,8 @@ namespace LogArchive.Models
 			{
 				JObject json = JObject.Parse(File.ReadAllText(Path.Combine(MainFolder, "replaydata.json")));
 
-				Clipboard.SetText(JsonConvert.SerializeObject((JObject)json[id.ToString()]));
+				if(json[date] != null)
+					Clipboard.SetText(JsonConvert.SerializeObject((JObject)json[date]));
 			}
 		}
 	}

@@ -501,26 +501,24 @@ namespace LogArchive.ViewModels
 				{
 					//ID,날짜,해역이름,해역,적 함대,랭크,드랍
 					var parts = line.Split(',');
-					if (parts[0] != "ID" && parts[6] != "")
+					if (parts[0] != "ID" && parts[5] != "")
 						items.Add(new DropStringLists
 						{
-							Id = int.Parse(parts[0]),
-							Date = parts[1],
-							SeaArea = parts[2],
-							MapInfo = parts[3],
-							EnemyFleet = parts[4],
-							Rank = parts[5],
-							Drop = parts[6],
+							Date = parts[0],
+							SeaArea = parts[1],
+							MapInfo = parts[2],
+							EnemyFleet = parts[3],
+							Rank = parts[4],
+							Drop = parts[5],
 						});
 					else if (parts[0] != "ID")
 						items.Add(new DropStringLists
 						{
-							Id = int.Parse(parts[0]),
-							Date = parts[1],
-							SeaArea = parts[2],
-							MapInfo = parts[3],
-							EnemyFleet = parts[4],
-							Rank = parts[5],
+							Date = parts[0],
+							SeaArea = parts[1],
+							MapInfo = parts[2],
+							EnemyFleet = parts[3],
+							Rank = parts[4],
 							Drop = string.Empty,
 						});
 				}
@@ -533,7 +531,6 @@ namespace LogArchive.ViewModels
 				{
 					foreach (var item in items)
 					{
-						writer.Write(item.Id);
 						writer.Write(item.Date);
 						writer.Write(item.SeaArea);
 						writer.Write(item.MapInfo);
@@ -582,13 +579,43 @@ namespace LogArchive.ViewModels
 			int world = 0;
 			int map = 0;
 			List<int> nodes = new List<int>();
+			bool searchNode = true;
 
 			if (int.TryParse(Drop_World, out world) && int.TryParse(Drop_World, out map))
 			{
+				string[] nodeText = Drop_Nodes.Split(',');
 
+				foreach(var text in nodeText)
+				{
+					int node;
+					if (!int.TryParse(text, out node))
+					{
+						searchNode = false;
+						break;
+					}
+					nodes.Add(node);
+				}
 			}
 
-			//DropLists = DropData.Select
+			DropLists = DropData.Where(x => DateTime.Compare(CSVStringToTime(x.Date), Drop_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Drop_MaxDate) <= 0)
+											.Where(x => x.Rank == "S" && Drop_RankS)
+											.Where(x => x.Rank == "A" && Drop_RankA)
+											.Where(x => x.Rank == "B" && Drop_RankB)
+											.Where(x => (x.Rank == "C" || x.Rank == "D" || x.Rank == "E") && Drop_RankC)
+											.ToList();
+			foreach (var drop in DropLists)
+			{
+				int dropworld = 0;
+				int dropmap = 0;
+				int dropnode = 0;
+
+				string[] mapText = drop.MapInfo.Split('-');
+
+				if(!int.TryParse(mapText[0], out dropworld) || !int.TryParse(mapText[1], out dropmap) || !int.TryParse(mapText[2], out dropnode))
+					DropLists.Remove(drop);
+				if (dropworld != world || dropmap != map || !nodes.Any(x => dropnode == x))
+					DropLists.Remove(drop);
+			}
 		}
 
 		public DateTime CSVStringToTime(string str)
@@ -764,7 +791,6 @@ namespace LogArchive.ViewModels
 				{
 					var item = new DropStringLists
 					{
-						Id = reader.ReadInt32(),
 						Date = reader.ReadString(),
 						SeaArea = reader.ReadString(),
 						MapInfo = reader.ReadString(),

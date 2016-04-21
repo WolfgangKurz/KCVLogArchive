@@ -166,7 +166,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\LodDataList.cs" />
+    <Compile Include="Models\LogDataList.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

@@ -770,16 +770,6 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Id}"/>
-										</DataTemplate>
-									</GridViewColumn.CellTemplate>
-									<GridViewColumnHeader>
-										<TextBlock Text="Id"/>
-									</GridViewColumnHeader>
-								</GridViewColumn>
-								<GridViewColumn Width="Auto">
-									<GridViewColumn.CellTemplate>
-										<DataTemplate>
 											<TextBlock Margin="6,3,0,3" Text="{Binding Date}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
@@ -840,7 +830,7 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<metro2:CallMethodButton Margin="1" Content="복사" MethodName="CopyBattleData" MethodParameter="{Binding Id}"/>
+											<metro2:CallMethodButton Margin="1" Content="복사" MethodName="CopyBattleData" MethodParameter="{Binding Date}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
