@@ -1,8 +1,12 @@
-﻿using Grabacr07.KanColleWrapper;
-using Grabacr07.KanColleWrapper.Models;
+﻿//using Grabacr07.KanColleWrapper;
+//using Grabacr07.KanColleWrapper.Models;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows;
+//using System.Windows;
+
+using LogArchive.Models;
+using System;
+using System.Linq;
 
 namespace LogArchive.ViewModels
 {
@@ -152,6 +156,214 @@ namespace LogArchive.ViewModels
 		}
 		#endregion
 
+		#region DropData 변경 통지 프로퍼티
+
+		private List<DropStringLists> _DropData;
+
+		public List<DropStringLists> DropData
+		{
+			get { return this._DropData; }
+			set
+			{
+				if (this._DropData != value)
+				{
+					this._DropData = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_MinDate 변경 통지 프로퍼티
+
+		private DateTime _Drop_MinDate;
+
+		public DateTime Drop_MinDate
+		{
+			get
+			{
+				if(_Drop_MinDate == null)
+					_Drop_MaxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+				return this._Drop_MinDate;
+			}
+			set
+			{
+				if (this._Drop_MinDate != value)
+				{
+					this._Drop_MinDate = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0);
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_MaxDate 변경 통지 프로퍼티
+
+		private DateTime _Drop_MaxDate;
+
+		public DateTime Drop_MaxDate
+		{
+			get
+			{
+				if (_Drop_MaxDate == null)
+					_Drop_MaxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+				return this._Drop_MaxDate;
+			}
+			set
+			{
+				if (this._Drop_MaxDate != value)
+				{
+					this._Drop_MaxDate = new DateTime(value.Year, value.Month, value.Day, 23, 59, 59);
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_World 변경 통지 프로퍼티
+
+		private string _Drop_World;
+
+		public string Drop_World
+		{
+			get { return this._Drop_World; }
+			set
+			{
+				if (this._Drop_World != value)
+				{
+					this._Drop_World = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_Map 변경 통지 프로퍼티
+
+		private string _Drop_Map;
+
+		public string Drop_Map
+		{
+			get { return this._Drop_Map; }
+			set
+			{
+				if (this._Drop_Map != value)
+				{
+					this._Drop_Map = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_Nodes 변경 통지 프로퍼티
+
+		private string _Drop_Nodes;
+
+		public string Drop_Nodes
+		{
+			get { return this._Drop_Nodes; }
+			set
+			{
+				if (this._Drop_Nodes != value)
+				{
+					this._Drop_Nodes = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_RankS 변경 통지 프로퍼티
+
+		private bool _Drop_RankS;
+
+		public bool Drop_RankS
+		{
+			get { return this._Drop_RankS; }
+			set
+			{
+				if (this._Drop_RankS != value)
+				{
+					this._Drop_RankS = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_RankA 변경 통지 프로퍼티
+
+		private bool _Drop_RankA;
+
+		public bool Drop_RankA
+		{
+			get { return this._Drop_RankA; }
+			set
+			{
+				if (this._Drop_RankA != value)
+				{
+					this._Drop_RankA = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_RankB 변경 통지 프로퍼티
+
+		private bool _Drop_RankB;
+
+		public bool Drop_RankB
+		{
+			get { return this._Drop_RankB; }
+			set
+			{
+				if (this._Drop_RankB != value)
+				{
+					this._Drop_RankB = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Drop_RankC 변경 통지 프로퍼티
+
+		private bool _Drop_RankC;
+
+		public bool Drop_RankC
+		{
+			get { return this._Drop_RankC; }
+			set
+			{
+				if (this._Drop_RankC != value)
+				{
+					this._Drop_RankC = value;
+					this.RaisePropertyChanged();
+					RefreshDropList();
+				}
+			}
+		}
+
+		#endregion
 
 		private string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
@@ -280,47 +492,54 @@ namespace LogArchive.ViewModels
 			#endregion
 
 			#region Drop구역
-			csvPath = Path.Combine(MainFolder, "DropLog.csv");
+			csvPath = Path.Combine(MainFolder, "DropLog2.csv");
 			if (File.Exists(csvPath))
 			{
 
 				var items = new List<DropStringLists>();
 				foreach (var line in File.ReadAllLines(csvPath))
 				{
+					//ID,날짜,해역이름,해역,적 함대,랭크,드랍
 					var parts = line.Split(',');
-					if (parts[0] != "날짜" && parts[1] != "")
+					if (parts[0] != "ID" && parts[6] != "")
 						items.Add(new DropStringLists
 						{
-							Date = parts[0],
-							Drop = parts[1],
+							Id = int.Parse(parts[0]),
+							Date = parts[1],
 							SeaArea = parts[2],
-							EnemyFleet = parts[3],
-							Rank = parts[4],
+							MapInfo = parts[3],
+							EnemyFleet = parts[4],
+							Rank = parts[5],
+							Drop = parts[6],
 						});
-					else if (parts[0] != "날짜")
+					else if (parts[0] != "ID")
 						items.Add(new DropStringLists
 						{
-							Date = parts[0],
-							Drop = string.Empty,
+							Id = int.Parse(parts[0]),
+							Date = parts[1],
 							SeaArea = parts[2],
-							EnemyFleet = parts[3],
-							Rank = parts[4],
+							MapInfo = parts[3],
+							EnemyFleet = parts[4],
+							Rank = parts[5],
+							Drop = string.Empty,
 						});
 				}
 
 
-				var binPath = Path.Combine(MainFolder, "Bin", "Drop.bin");
+				var binPath = Path.Combine(MainFolder, "Bin", "Drop2.bin");
 
 				using (var fileStream = new FileStream(binPath, FileMode.Create, FileAccess.Write, FileShare.None))
 				using (var writer = new BinaryWriter(fileStream))
 				{
 					foreach (var item in items)
 					{
+						writer.Write(item.Id);
 						writer.Write(item.Date);
-						writer.Write(item.Drop);
 						writer.Write(item.SeaArea);
+						writer.Write(item.MapInfo);
 						writer.Write(item.EnemyFleet);
 						writer.Write(item.Rank);
+						writer.Write(item.Drop);
 					}
 					fileStream.Dispose();
 					fileStream.Close();
@@ -357,6 +576,35 @@ namespace LogArchive.ViewModels
 		{
 			if (this.DropPages + 1 <= DropMaxPage) this.DropPages++;
 		}
+
+		public void RefreshDropList()
+		{
+			int world = 0;
+			int map = 0;
+			List<int> nodes = new List<int>();
+
+			if (int.TryParse(Drop_World, out world) && int.TryParse(Drop_World, out map))
+			{
+
+			}
+
+			//DropLists = DropData.Select
+		}
+
+		public DateTime CSVStringToTime(string str)
+		{
+			string[] elem = str.Split("/ :".ToCharArray());
+
+			// Excel様が *うっかり* データを破損させることがあるので対応
+			return new DateTime(
+				elem.Length > 0 ? int.Parse(elem[0]) : 1970,
+				elem.Length > 1 ? int.Parse(elem[1]) : 1,
+				elem.Length > 2 ? int.Parse(elem[2]) : 1,
+				elem.Length > 3 ? int.Parse(elem[3]) : 0,
+				elem.Length > 4 ? int.Parse(elem[4]) : 0,
+				elem.Length > 5 ? int.Parse(elem[5]) : 0);
+		}
+
 		#region 새로고침 버튼 메서드 모음
 		public void RefreshItem()
 		{
@@ -374,9 +622,10 @@ namespace LogArchive.ViewModels
 		}
 		public void RefreshDrop(bool IsNavi)
 		{
-			var binPath = Path.Combine(MainFolder, "Bin", "Drop.bin");
+			var binPath = Path.Combine(MainFolder, "Bin", "Drop2.bin");
 			if (File.Exists(binPath))
-				this.DropLists = new List<DropStringLists>(ReturnDropList(binPath, IsNavi));
+				this.DropData = new List<DropStringLists>(ReturnDropList(binPath, IsNavi));
+			RefreshDropList();
 		}
 		public void RefreshBuild(bool IsNavi)
 		{
@@ -387,9 +636,10 @@ namespace LogArchive.ViewModels
 		}
 		public void RefreshDrop()
 		{
-			var binPath = Path.Combine(MainFolder, "Bin", "Drop.bin");
+			var binPath = Path.Combine(MainFolder, "Bin", "Drop2.bin");
 			if (File.Exists(binPath))
-				this.DropLists = new List<DropStringLists>(ReturnDropList(binPath, false));
+				this.DropData = new List<DropStringLists>(ReturnDropList(binPath, false));
+			RefreshDropList();
 		}
 		public void RefreshBuild()
 		{
@@ -423,8 +673,8 @@ namespace LogArchive.ViewModels
 						Steel = reader.ReadInt32(),
 						bauxite = reader.ReadInt32(),
 					};
-					item.Results = KanColleClient.Current.Translations.GetTranslation(item.Results, TranslationType.Equipment, true);
-					item.Assistant = KanColleClient.Current.Translations.GetTranslation(item.Assistant, TranslationType.ShipTypes, true);
+					//item.Results = KanColleClient.Current.Translations.GetTranslation(item.Results, TranslationType.Equipment, true);
+					//item.Assistant = KanColleClient.Current.Translations.GetTranslation(item.Assistant, TranslationType.ShipTypes, true);
 					items.Add(item);
 				}
 				memoryStream.Dispose();
@@ -473,7 +723,7 @@ namespace LogArchive.ViewModels
 						bauxite = reader.ReadInt32(),
 						UseItems = reader.ReadInt32(),
 					};
-					item.Results = KanColleClient.Current.Translations.GetTranslation(item.Results, TranslationType.Ships, true);
+					//item.Results = KanColleClient.Current.Translations.GetTranslation(item.Results, TranslationType.Ships, true);
 					items.Add(item);
 				}
 				memoryStream.Dispose();
@@ -514,14 +764,16 @@ namespace LogArchive.ViewModels
 				{
 					var item = new DropStringLists
 					{
+						Id = reader.ReadInt32(),
 						Date = reader.ReadString(),
-						Drop = reader.ReadString(),
 						SeaArea = reader.ReadString(),
+						MapInfo = reader.ReadString(),
 						EnemyFleet = reader.ReadString(),
 						Rank = reader.ReadString(),
+						Drop = reader.ReadString(),
 					};
-					item.SeaArea = KanColleClient.Current.Translations.GetTranslation(item.SeaArea, TranslationType.OperationMaps, true);
-					item.EnemyFleet = KanColleClient.Current.Translations.GetTranslation(item.EnemyFleet, TranslationType.OperationSortie, true);
+					//item.SeaArea = KanColleClient.Current.Translations.GetTranslation(item.SeaArea, TranslationType.OperationMaps, true);
+					//item.EnemyFleet = KanColleClient.Current.Translations.GetTranslation(item.EnemyFleet, TranslationType.OperationSortie, true);
 					items.Add(item);
 				}
 				memoryStream.Dispose();
