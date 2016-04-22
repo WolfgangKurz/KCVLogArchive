@@ -194,8 +194,7 @@
 					</RadioButton>
 				</StackPanel>
 				<Grid Grid.Row="1"
-					Visibility="Collapsed">
-					<!--Visibility="{Binding ElementName=Information, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">-->
+					Visibility="{Binding ElementName=Information, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<FlowDocumentScrollViewer Padding="0,-18,0,0">
 						<FlowDocument FontSize="12"
 									  Foreground="{DynamicResource ForegroundBrushKey}"
@@ -216,8 +215,8 @@
 							</Paragraph>
 							<Paragraph Language="ko-KR">
 								<Run Text="Project home:" />
-								<metro2:HyperlinkEx Uri="http://KanColleViewerKr.tk">
-									<Run Text="http://KanColleViewerKr.tk" />
+								<metro2:HyperlinkEx Uri="http://kcvkr.tistory.com/">
+									<Run Text="http://kcvkr.tistory.com/" />
 								</metro2:HyperlinkEx>
 								<LineBreak />
 								<Run Text="업데이트 링크:" />
@@ -619,8 +618,7 @@
 					</Grid>
 				</Grid>
 				<Grid Margin="0,10,0,0" Grid.Row="1"
-					Visibility="Visible">
-					<!--Visibility="{Binding ElementName=DropTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">-->
+					Visibility="{Binding ElementName=DropTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
