@@ -8,7 +8,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using Grabacr07.KanColleWrapper;
+//using Grabacr07.KanColleWrapper;
+using MetroRadiance.UI;
 
 namespace LogArchive
 {
@@ -30,8 +31,8 @@ namespace LogArchive
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			ProductInfo = new ProductInfo();
 
-			ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
-			KanColleClient.Current.Translations.EnableTranslations = true;
+			ThemeService.Current.Register(this, Theme.Dark, Accent.Purple);
+			//KanColleClient.Current.Translations.EnableTranslations = true;
 
 
 			ViewModelRoot = new MainWindowViewModel();
