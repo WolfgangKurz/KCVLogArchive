@@ -177,6 +177,8 @@
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="Views\Behaviors\SetWindowLocationAction.cs" />
     <Compile Include="Views\Controls\AppIcon.cs" />
+    <Compile Include="Views\Converters\DateTimeToStringConverter.cs" />
+    <Compile Include="Views\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

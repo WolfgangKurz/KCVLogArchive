@@ -12,6 +12,7 @@
 				   xmlns:viewModels="clr-namespace:LogArchive.ViewModels"
 				   xmlns:behaviors="clr-namespace:LogArchive.Views.Behaviors"
 				   xmlns:controls="clr-namespace:LogArchive.Views.Controls"
+				   xmlns:converters="clr-namespace:LogArchive.Views.Converters"
 				   mc:Ignorable="d"
 				   Title="{Binding Title}" 
 				   Height="676" 
@@ -34,6 +35,8 @@
 	</i:Interaction.Triggers>
 	<metro:MetroWindow.Resources>
 		<ResourceDictionary>
+			<converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
+			<converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
 			<Style x:Key="TabLikeRadioButtonStyleKey"
 				   TargetType="{x:Type RadioButton}">
 				<Setter Property="OverridesDefaultStyle"
@@ -635,6 +638,11 @@
 												 Padding="20,6"
 												 Margin="10,0,0,0"
 												 MethodName="csvtobin"/>
+						<metro2:CallMethodButton Content="표시된 드랍목록을 클립보드에 복사"
+												 HorizontalAlignment="Left"
+												 Padding="20,6"
+												 Margin="10,0,0,0"
+												 MethodName="CopyDropList"/>
 					</StackPanel>
 					<Border Grid.Row="1"
 							BorderThickness=".99"
@@ -672,9 +680,28 @@
 
 									<TextBlock Margin="0,3,0,0" Text="날짜 :"/>
 									<WrapPanel Grid.Column="2">
-										<DatePicker SelectedDate="{Binding Drop_MinDate, Mode=TwoWay}" BorderBrush="{DynamicResource BorderBrushKey}" Background="{DynamicResource ActiveBackgroundBrushKey}" FirstDayOfWeek="Monday" IsTodayHighlighted="True"/>
+										<CheckBox IsChecked="{Binding Drop_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
+										<metro:PromptTextBox IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MinDate, Mode=TwoWay, Converter={StaticResource DateTimeToStringConverter}}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
 										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
-										<DatePicker SelectedDate="{Binding Drop_MaxDate, Mode=TwoWay}" BorderBrush="{DynamicResource BorderBrushKey}" Background="{DynamicResource ActiveBackgroundBrushKey}" FirstDayOfWeek="Monday" IsTodayHighlighted="True"/>
+										<metro:PromptTextBox  IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MaxDate, Mode=TwoWay, Converter={StaticResource DateTimeToStringConverter}}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+
+									</WrapPanel>
+								</Grid>
+
+								<Grid Margin="0,2,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,2,0,0" Text="랭크 :"/>
+									<WrapPanel Grid.Column="2">
+										<CheckBox IsChecked="{Binding Drop_RankS, Mode=TwoWay}" Content="S"/>
+										<CheckBox IsChecked="{Binding Drop_RankA, Mode=TwoWay}" Content="A"/>
+										<CheckBox IsChecked="{Binding Drop_RankB, Mode=TwoWay}" Content="B"/>
+										<CheckBox IsChecked="{Binding Drop_RankC, Mode=TwoWay}" Content="패배"/>
 									</WrapPanel>
 								</Grid>
 							</StackPanel>
@@ -694,26 +721,8 @@
 										<TextBlock Margin="0,3,0,0" Text=" - "/>
 										<metro:PromptTextBox Text="{Binding Drop_Map, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="18" Prompt=""/>
 										<TextBlock Margin="0,3,0,0" Text=" - "/>
-										<metro:PromptTextBox Text="{Binding Drop_Nodes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="57" Prompt="','로 구분"/>
-									</WrapPanel>
-								</Grid>
-							</StackPanel>
-
-							<StackPanel>
-								<Grid Margin="0,2,0,0">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto" 
-														  SharedSizeGroup="FilterName"/>
-										<ColumnDefinition Width="10"/>
-										<ColumnDefinition Width="*"/>
-									</Grid.ColumnDefinitions>
-
-									<TextBlock Margin="0,2,0,0" Text="랭크 :"/>
-									<WrapPanel Grid.Column="2">
-										<CheckBox IsChecked="{Binding Drop_RankS, Mode=TwoWay}" Content="S"/>
-										<CheckBox IsChecked="{Binding Drop_RankA, Mode=TwoWay}" Content="A"/>
-										<CheckBox IsChecked="{Binding Drop_RankB, Mode=TwoWay}" Content="B"/>
-										<CheckBox IsChecked="{Binding Drop_RankC, Mode=TwoWay}" Content="패배"/>
+										<metro:PromptTextBox IsEnabled="{Binding Drop_OnlyBoss, Mode=TwoWay, Converter={StaticResource InverseBooleanConverter}}" Text="{Binding Drop_Nodes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="57" Prompt="','로 구분"/>
+										<CheckBox Margin="15,0,0,0" IsChecked="{Binding Drop_OnlyBoss, Mode=TwoWay}" Content="보스만 보기"/>
 									</WrapPanel>
 								</Grid>
 							</StackPanel>
@@ -770,6 +779,16 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Id}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="No.  "/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
 											<TextBlock Margin="6,3,0,3" Text="{Binding Date}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
@@ -795,6 +814,16 @@
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
 										<TextBlock Text="해역"/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Boss}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="보스"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 								<GridViewColumn Width="Auto">
