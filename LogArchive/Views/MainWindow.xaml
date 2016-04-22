@@ -233,6 +233,12 @@
 								<metro2:HyperlinkEx Uri="https://github.com/Grabacr07/KanColleViewer">
 									<Run Text="https://github.com/Grabacr07/KanColleViewer" />
 								</metro2:HyperlinkEx>
+								<LineBreak />
+								<LineBreak />
+								<Run Text="전투 리플레이:" />
+								<metro2:HyperlinkEx Uri="http://kc3kai.github.io/kancolle-replay/battleplayer.html">
+									<Run Text="http://kc3kai.github.io/kancolle-replay/battleplayer.html" />
+								</metro2:HyperlinkEx>
 							</Paragraph>
 						</FlowDocument>
 					</FlowDocumentScrollViewer>
