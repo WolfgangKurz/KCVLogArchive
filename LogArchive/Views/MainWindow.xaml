@@ -7,11 +7,12 @@
 				   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 				   xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
 				   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
-				   xmlns:metro2="clr-namespace:MetroTrilithon.Controls;assembly=MetroTrilithon.Desktop"
+				   xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
 				   xmlns:views="clr-namespace:LogArchive.Views"
 				   xmlns:viewModels="clr-namespace:LogArchive.ViewModels"
 				   xmlns:behaviors="clr-namespace:LogArchive.Views.Behaviors"
 				   xmlns:controls="clr-namespace:LogArchive.Views.Controls"
+				   xmlns:converters="clr-namespace:LogArchive.Views.Converters"
 				   mc:Ignorable="d"
 				   Title="{Binding Title}" 
 				   Height="676" 
@@ -34,6 +35,8 @@
 	</i:Interaction.Triggers>
 	<metro:MetroWindow.Resources>
 		<ResourceDictionary>
+			<converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
+			<converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
 			<Style x:Key="TabLikeRadioButtonStyleKey"
 				   TargetType="{x:Type RadioButton}">
 				<Setter Property="OverridesDefaultStyle"
@@ -191,7 +194,7 @@
 					</RadioButton>
 				</StackPanel>
 				<Grid Grid.Row="1"
-					  Visibility="{Binding ElementName=Information, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+					Visibility="{Binding ElementName=Information, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<FlowDocumentScrollViewer Padding="0,-18,0,0">
 						<FlowDocument FontSize="12"
 									  Foreground="{DynamicResource ForegroundBrushKey}"
@@ -212,8 +215,8 @@
 							</Paragraph>
 							<Paragraph Language="ko-KR">
 								<Run Text="Project home:" />
-								<metro2:HyperlinkEx Uri="http://KanColleViewerKr.tk">
-									<Run Text="http://KanColleViewerKr.tk" />
+								<metro2:HyperlinkEx Uri="http://kcvkr.tistory.com/">
+									<Run Text="http://kcvkr.tistory.com/" />
 								</metro2:HyperlinkEx>
 								<LineBreak />
 								<Run Text="업데이트 링크:" />
@@ -615,12 +618,14 @@
 					</Grid>
 				</Grid>
 				<Grid Margin="0,10,0,0" Grid.Row="1"
-							Visibility="{Binding ElementName=DropTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+					Visibility="{Binding ElementName=DropTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition/>
 						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
+
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,10">
 						<metro2:CallMethodButton Content="불러오기"
 												 HorizontalAlignment="Left"
@@ -631,9 +636,98 @@
 												 Padding="20,6"
 												 Margin="10,0,0,0"
 												 MethodName="csvtobin"/>
+						<metro2:CallMethodButton Content="표시된 드랍목록을 클립보드에 복사"
+												 HorizontalAlignment="Left"
+												 Padding="20,6"
+												 Margin="10,0,0,0"
+												 MethodName="CopyDropList"/>
 					</StackPanel>
+					<Border Grid.Row="1"
+							BorderThickness=".99"
+							BorderBrush="{DynamicResource BorderBrushKey}"
+							Padding="5"
+							Margin="0,0,0,10">
+						<WrapPanel>
+							<WrapPanel.Resources>
+								<Style TargetType="{x:Type RadioButton}"
+									   BasedOn="{StaticResource {x:Type RadioButton}}">
+									<Setter Property="Margin"
+											Value="0,2,12,2" />
+								</Style>
+								<Style TargetType="{x:Type CheckBox}"
+									   BasedOn="{StaticResource {x:Type CheckBox}}">
+									<Setter Property="Margin"
+											Value="0,2,12,2" />
+								</Style>
+								<Style TargetType="{x:Type StackPanel}">
+									<Setter Property="Margin"
+											Value="0,0,25,0" />
+									<Setter Property="Grid.IsSharedSizeScope"
+											Value="True" />
+								</Style>
+							</WrapPanel.Resources>
+
+							<StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,3,0,0" Text="날짜 :"/>
+									<WrapPanel Grid.Column="2">
+										<CheckBox IsChecked="{Binding Drop_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
+										<metro:PromptTextBox IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MinDate, Mode=TwoWay, Converter={StaticResource DateTimeToStringConverter}}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
+										<metro:PromptTextBox  IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MaxDate, Mode=TwoWay, Converter={StaticResource DateTimeToStringConverter}}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+
+									</WrapPanel>
+								</Grid>
+
+								<Grid Margin="0,2,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,2,0,0" Text="랭크 :"/>
+									<WrapPanel Grid.Column="2">
+										<CheckBox IsChecked="{Binding Drop_RankS, Mode=TwoWay}" Content="S"/>
+										<CheckBox IsChecked="{Binding Drop_RankA, Mode=TwoWay}" Content="A"/>
+										<CheckBox IsChecked="{Binding Drop_RankB, Mode=TwoWay}" Content="B"/>
+										<CheckBox IsChecked="{Binding Drop_RankC, Mode=TwoWay}" Content="패배"/>
+									</WrapPanel>
+								</Grid>
+							</StackPanel>
+
+							<StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,3,0,0" Text="해역 :"/>
+									<WrapPanel Grid.Column="2">
+										<metro:PromptTextBox Text="{Binding Drop_World, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="18" Prompt=""/>
+										<TextBlock Margin="0,3,0,0" Text=" - "/>
+										<metro:PromptTextBox Text="{Binding Drop_Map, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="18" Prompt=""/>
+										<TextBlock Margin="0,3,0,0" Text=" - "/>
+										<metro:PromptTextBox IsEnabled="{Binding Drop_OnlyBoss, Mode=TwoWay, Converter={StaticResource InverseBooleanConverter}}" Text="{Binding Drop_Nodes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="57" Prompt="','로 구분"/>
+										<CheckBox Margin="15,0,0,0" IsChecked="{Binding Drop_OnlyBoss, Mode=TwoWay}" Content="보스만 보기"/>
+									</WrapPanel>
+								</Grid>
+							</StackPanel>
+						</WrapPanel>
+					</Border>
 					<ListView ItemsSource="{Binding DropLists}"
-							  Grid.Row="1"
+							  Grid.Row="2"
 					  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}">
 						<ListView.Resources>
 							<Style TargetType="{x:Type TextBlock}">
@@ -683,6 +777,16 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Id}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="No.  "/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
 											<TextBlock Margin="6,3,0,3" Text="{Binding Date}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
@@ -693,21 +797,31 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Drop}"/>
+											<TextBlock Margin="6,3,0,3" Text="{Binding SeaArea}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
-										<TextBlock Text="드롭"/>
+										<TextBlock Text="해역명"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding SeaArea}"/>
+											<TextBlock Margin="6,3,0,3" Text="{Binding MapInfo}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
-										<TextBlock Text="드롭해역"/>
+										<TextBlock Text="해역"/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Boss}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="보스"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 								<GridViewColumn Width="Auto">
@@ -730,10 +844,30 @@
 										<TextBlock Text="랭크"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Drop}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="드랍"/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
+											<metro2:CallMethodButton Margin="1" Content="복사" MethodName="CopyBattleData" MethodParameter="{Binding Date}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="전투기록"/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
 							</GridView>
 						</ListView.View>
 					</ListView>
-					<Grid Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,0">
+					<Grid Grid.Row="3" HorizontalAlignment="Center" Margin="0,10,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition/>
 							<ColumnDefinition/>
