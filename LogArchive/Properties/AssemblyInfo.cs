@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("제독업무도 바빠! 기록열람")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("KancolleviewerKr.tk")]
+[assembly: AssemblyCompany("kcvkr.tistory.com")]
 [assembly: AssemblyProduct("LogArchive")]
 [assembly: AssemblyCopyright("Copyright © 2015 FreyYa")]
 [assembly: AssemblyTrademark("")]
