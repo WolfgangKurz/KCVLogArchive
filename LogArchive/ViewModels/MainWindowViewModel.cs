@@ -158,6 +158,166 @@ namespace LogArchive.ViewModels
 		}
 		#endregion
 
+		#region Item_DateRange 변경 통지 프로퍼티
+
+		private bool _Item_DateRange;
+
+		public bool Item_DateRange
+		{
+			get { return this._Item_DateRange; }
+			set
+			{
+				if (this._Item_DateRange != value)
+				{
+					_Item_DateRange = value;
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_MinDate 변경 통지 프로퍼티
+
+		private DateTime _Item_MinDate;
+
+		public DateTime Item_MinDate
+		{
+			get { return this._Item_MinDate; }
+			set
+			{
+				if (this._Item_MinDate != value)
+				{
+					this._Item_MinDate = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0);
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_MaxDate 변경 통지 프로퍼티
+
+		private DateTime _Item_MaxDate;
+
+		public DateTime Item_MaxDate
+		{
+			get { return this._Item_MaxDate; }
+			set
+			{
+				if (this._Item_MaxDate != value)
+				{
+					this._Item_MaxDate = new DateTime(value.Year, value.Month, value.Day, 23, 59, 59);
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_Assistant 변경 통지 프로퍼티
+
+		private string _Item_Assistant;
+
+		public string Item_Assistant
+		{
+			get { return this._Item_Assistant; }
+			set
+			{
+				if (this._Item_Assistant != value)
+				{
+					this._Item_Assistant = value;
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_Fuel 변경 통지 프로퍼티
+
+		private int _Item_Fuel;
+
+		public int Item_Fuel
+		{
+			get { return this._Item_Fuel; }
+			set
+			{
+				if (this._Item_Fuel != value)
+				{
+					this._Item_Fuel = value;
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_Bullet 변경 통지 프로퍼티
+
+		private int _Item_Bullet;
+
+		public int Item_Bullet
+		{
+			get { return this._Item_Bullet; }
+			set
+			{
+				if (this._Item_Bullet != value)
+				{
+					this._Item_Bullet = value;
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_Steel 변경 통지 프로퍼티
+
+		private int _Item_Steel;
+
+		public int Item_Steel
+		{
+			get { return this._Item_Steel; }
+			set
+			{
+				if (this._Item_Steel != value)
+				{
+					this._Item_Steel = value;
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Item_Bauxite 변경 통지 프로퍼티
+
+		private int _Item_Bauxite;
+
+		public int Item_Bauxite
+		{
+			get { return this._Item_Bauxite; }
+			set
+			{
+				if (this._Item_Bauxite != value)
+				{
+					this._Item_Bauxite = value;
+					this.RaisePropertyChanged();
+					RefreshItem(true);
+				}
+			}
+		}
+
+		#endregion
+
 		#region Build_DateRange 변경 통지 프로퍼티
 
 		private bool _Build_DateRange;
@@ -644,6 +804,9 @@ namespace LogArchive.ViewModels
 		{
 			this.Title = "제독업무도 바빠! 기록열람";
 
+			this._Item_MinDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+			this._Item_MaxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+
 			this._Build_MinDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 			this._Build_MaxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 			this._Build_ItemAll = true;
@@ -790,7 +953,6 @@ namespace LogArchive.ViewModels
 				var items = new List<DropStringLists>();
 				foreach (var line in File.ReadAllLines(csvPath))
 				{
-					//날짜,해역이름,해역,보스,적 함대,랭크,드랍
 					var parts = line.Split(',');
 					if (parts[0] != "날짜" && parts[6] != "")
 						items.Add(new DropStringLists
@@ -882,6 +1044,53 @@ namespace LogArchive.ViewModels
 				elem.Length > 5 ? int.Parse(elem[5]) : 0);
 		}
 
+		#region ItemLists 필터
+		public List<ItemStringLists> ItemListFilter(List<ItemStringLists> itemdata)
+		{
+			if (itemdata == null)
+				return null;
+
+			itemdata = itemdata.Where(x => !Item_DateRange || (Item_DateRange && DateTime.Compare(CSVStringToTime(x.Date), Item_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Item_MaxDate) <= 0))
+											.Where(x => ItemAssistantCheck(x))
+											.Where(x => ItemRecipeCheck(x))
+											.ToList();
+
+			int count = 1;
+			foreach (var item in itemdata)
+			{
+				item.Id = count;
+				count++;
+			}
+
+			return itemdata;
+		}
+
+		/// <summary>
+		/// 해당 개발 데이터가 비서함 조건을 만족하고 있는지를 구합니다.
+		/// </summary>
+		public bool ItemAssistantCheck(ItemStringLists itemdata)
+		{
+			if (Item_Assistant == null || Item_Assistant == "" || itemdata.Assistant.Contains(Item_Assistant))
+				return true;
+
+			return false;
+		}
+
+		/// <summary>
+		/// 해당 개발 데이터가 레시피 조건을 만족하고 있는지를 구합니다.
+		/// </summary>
+		public bool ItemRecipeCheck(ItemStringLists itemdata)
+		{
+			if ((Item_Fuel == 0 || itemdata.Fuel == Item_Fuel) &&
+				(Item_Bullet == 0 || itemdata.Bullet == Item_Bullet) &&
+				(Item_Steel == 0 || itemdata.Steel == Item_Steel) &&
+				(Item_Bauxite == 0 || itemdata.Bauxite == Item_Bauxite))
+				return true;
+
+			return false;
+		}
+		#endregion
+
 		#region BuildLists 필터
 		public List<BuildStirngLists> BuildListFilter(List<BuildStirngLists> builddata)
 		{
@@ -896,9 +1105,9 @@ namespace LogArchive.ViewModels
 											.ToList();
 
 			int count = 1;
-			foreach (var drop in builddata)
+			foreach (var build in builddata)
 			{
-				drop.Id = count;
+				build.Id = count;
 				count++;
 			}
 
@@ -1077,23 +1286,23 @@ namespace LogArchive.ViewModels
 		#endregion
 
 		#region 복사 버튼 메서드 모음
-		public void CopyDropList()
+		public void CopyItemList()
 		{
-			var binPath = Path.Combine(MainFolder, "Bin", "Drop2.bin");
-			List<DropStringLists> droplist = null;
+			var binPath = Path.Combine(MainFolder, "Bin", "ItemBuild2.bin");
+			List<ItemStringLists> itemlist = null;
 			if (File.Exists(binPath))
-				droplist = ReturnDropList(binPath, false, true);
+				itemlist = ReturnItemList(binPath, false, true);
 			else
 				return;
 
 			StringBuilder text = new StringBuilder();
 
-			text.AppendLine("No.,날짜,해역이름,해역,보스,적 함대,랭크,드랍");
+			text.AppendLine("No.,날짜,비서함,연료,탄,강재,보크사이트,결과");
 
 			int count = 1;
-			foreach (var drop in droplist)
+			foreach (var item in itemlist)
 			{
-				text.AppendLine($"{count},{drop.Date},{drop.SeaArea},{drop.MapInfo},{drop.Boss},{drop.EnemyFleet},{drop.Rank},{drop.Drop}");
+				text.AppendLine($"{count},{item.Date},{item.Assistant},{item.Fuel},{item.Bullet},{item.Steel},{item.Bauxite},{item.Results}");
 				count++;
 			}
 
@@ -1114,9 +1323,32 @@ namespace LogArchive.ViewModels
 			text.AppendLine("No.,날짜,비서함,연료,탄,강재,보크사이트,개발자재,결과");
 
 			int count = 1;
-			foreach (var drop in buildlist)
+			foreach (var build in buildlist)
 			{
-				text.AppendLine($"{count},{drop.Date},{drop.Assistant},{drop.Fuel},{drop.Bullet},{drop.Steel},{drop.Bauxite},{drop.UseItems},{drop.Results}");
+				text.AppendLine($"{count},{build.Date},{build.Assistant},{build.Fuel},{build.Bullet},{build.Steel},{build.Bauxite},{build.UseItems},{build.Results}");
+				count++;
+			}
+
+			Clipboard.SetText(text.ToString());
+		}
+
+		public void CopyDropList()
+		{
+			var binPath = Path.Combine(MainFolder, "Bin", "Drop2.bin");
+			List<DropStringLists> droplist = null;
+			if (File.Exists(binPath))
+				droplist = ReturnDropList(binPath, false, true);
+			else
+				return;
+
+			StringBuilder text = new StringBuilder();
+
+			text.AppendLine("No.,날짜,해역이름,해역,보스,적 함대,랭크,드랍");
+
+			int count = 1;
+			foreach (var drop in droplist)
+			{
+				text.AppendLine($"{count},{drop.Date},{drop.SeaArea},{drop.MapInfo},{drop.Boss},{drop.EnemyFleet},{drop.Rank},{drop.Drop}");
 				count++;
 			}
 
@@ -1156,6 +1388,7 @@ namespace LogArchive.ViewModels
 				reader.Dispose();
 				reader.Close();
 			}
+			items = ItemListFilter(items);
 			if (ReturnAll == true) return items;
 
 			int Page = 0;

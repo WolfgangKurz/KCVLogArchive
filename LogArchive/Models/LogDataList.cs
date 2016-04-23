@@ -39,7 +39,7 @@ namespace LogArchive.Models
 	}
 
 	/// <summary>
-	/// 날짜,결과,비서함,연료,탄,강재,보크사이트
+	/// 날짜,비서함,연료,탄,강재,보크사이트,결과
 	/// </summary>
 	public class ItemStringLists
 	{

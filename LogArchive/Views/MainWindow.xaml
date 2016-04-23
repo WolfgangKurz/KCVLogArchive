@@ -173,14 +173,14 @@
 							   FontSize="16"
 							   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
 					</RadioButton>
-					<RadioButton x:Name="ItemTab"
+					<RadioButton IsChecked="True" x:Name="ItemTab"
 								 Style="{StaticResource TabLikeRadioButtonStyleKey}">
 						<TextBlock Text="장비개발기록"
 							   FontFamily="{DynamicResource EmphaticFontFamilyKey}"
 							   FontSize="16"
 							   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
 					</RadioButton>
-					<RadioButton IsChecked="True" x:Name="BuildTab"
+					<RadioButton x:Name="BuildTab"
 							 Style="{StaticResource TabLikeRadioButtonStyleKey}">
 						<TextBlock Text="건조기록"
 							   FontFamily="{DynamicResource EmphaticFontFamilyKey}"
@@ -265,7 +265,95 @@
 												 Padding="20,6"
 												 Margin="10,0,0,0"
 												 MethodName="csvtobin"/>
+						<metro2:CallMethodButton Content="표시된 개발기록을 클립보드에 복사"
+												 HorizontalAlignment="Left"
+												 Padding="20,6"
+												 Margin="10,0,0,0"
+												 MethodName="CopyItemList"/>
 					</StackPanel>
+
+					<Border Grid.Row="1"
+							BorderThickness=".99"
+							BorderBrush="{DynamicResource BorderBrushKey}"
+							Padding="5"
+							Margin="0,0,0,10">
+						<WrapPanel>
+							<WrapPanel.Resources>
+								<Style TargetType="{x:Type RadioButton}"
+									   BasedOn="{StaticResource {x:Type RadioButton}}">
+									<Setter Property="Margin"
+											Value="0,2,12,2" />
+								</Style>
+								<Style TargetType="{x:Type CheckBox}"
+									   BasedOn="{StaticResource {x:Type CheckBox}}">
+									<Setter Property="Margin"
+											Value="0,2,12,2" />
+								</Style>
+								<Style TargetType="{x:Type StackPanel}">
+									<Setter Property="Margin"
+											Value="0,0,25,0" />
+									<Setter Property="Grid.IsSharedSizeScope"
+											Value="True" />
+								</Style>
+							</WrapPanel.Resources>
+
+							<StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,3,0,0" Text="날짜 :" HorizontalAlignment="Right"/>
+									<WrapPanel Grid.Column="2">
+										<CheckBox IsChecked="{Binding Item_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
+										<metro:PromptTextBox IsEnabled="{Binding Item_DateRange, Mode=TwoWay}" Text="{Binding Item_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
+										<metro:PromptTextBox  IsEnabled="{Binding Item_DateRange, Mode=TwoWay}" Text="{Binding Item_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+
+									</WrapPanel>
+								</Grid>
+
+								<Grid Margin="0,2,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,2,0,0" Text="레시피 :" HorizontalAlignment="Right"/>
+									<WrapPanel Grid.Column="2">
+										<metro:PromptTextBox Text="{Binding Item_Fuel, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt=" 연료 "/>
+										<TextBlock Margin="0,3,0,0" Text=" / "/>
+										<metro:PromptTextBox Text="{Binding Item_Bullet, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt=" 탄약 "/>
+										<TextBlock Margin="0,3,0,0" Text=" / "/>
+										<metro:PromptTextBox Text="{Binding Item_Steel, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt=" 강재 "/>
+										<TextBlock Margin="0,3,0,0" Text=" / "/>
+										<metro:PromptTextBox Text="{Binding Item_Bauxite, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt=" 보키 "/>
+									</WrapPanel>
+								</Grid>
+							</StackPanel>
+
+							<StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" 
+														  SharedSizeGroup="FilterName"/>
+										<ColumnDefinition Width="10"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,3,0,0" Text="비서함 :" HorizontalAlignment="Right"/>
+									<WrapPanel Grid.Column="2">
+										<metro:PromptTextBox Text="{Binding Item_Assistant, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Prompt=" 함종 검색 "/>
+									</WrapPanel>
+								</Grid>
+							</StackPanel>
+						</WrapPanel>
+					</Border>
 
 					<ListView ItemsSource="{Binding ItemLists}"
 							  Grid.Row="2"
@@ -318,21 +406,21 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Date}"/>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Id}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
-										<TextBlock Text="날짜"/>
+										<TextBlock Text="No.  "/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Results}"/>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Date}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
-										<TextBlock Text="결과"/>
+										<TextBlock Text="날짜"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 								<GridViewColumn Width="Auto">
@@ -383,6 +471,16 @@
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
 										<TextBlock Text="보크사이트"/>
+									</GridViewColumnHeader>
+								</GridViewColumn>
+								<GridViewColumn Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
+											<TextBlock Margin="6,3,0,3" Text="{Binding Results}"/>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+									<GridViewColumnHeader>
+										<TextBlock Text="결과"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 							</GridView>
@@ -500,9 +598,9 @@
 									<TextBlock Margin="0,3,0,0" Text="날짜 :" HorizontalAlignment="Right"/>
 									<WrapPanel Grid.Column="2">
 										<CheckBox IsChecked="{Binding Build_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
-										<metro:PromptTextBox IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+										<metro:PromptTextBox IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
 										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
-										<metro:PromptTextBox  IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+										<metro:PromptTextBox  IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
 
 									</WrapPanel>
 								</Grid>
@@ -540,7 +638,7 @@
 
 									<TextBlock Margin="0,3,0,0" Text="비서함 :" HorizontalAlignment="Right"/>
 									<WrapPanel Grid.Column="2">
-										<metro:PromptTextBox Text="{Binding Build_Assistant, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Prompt=" 비서함 검색 " BorderBrush="{DynamicResource BorderBrushKey}"/>
+										<metro:PromptTextBox Text="{Binding Build_Assistant, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Prompt=" 비서함 검색 "/>
 									</WrapPanel>
 								</Grid>
 								
@@ -817,9 +915,9 @@
 									<TextBlock Margin="0,3,0,0" Text="날짜 :"/>
 									<WrapPanel Grid.Column="2">
 										<CheckBox IsChecked="{Binding Drop_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
-										<metro:PromptTextBox IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+										<metro:PromptTextBox IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
 										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
-										<metro:PromptTextBox  IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01" BorderBrush="{DynamicResource BorderBrushKey}"/>
+										<metro:PromptTextBox  IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
 
 									</WrapPanel>
 								</Grid>
