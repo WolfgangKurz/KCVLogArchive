@@ -173,7 +173,7 @@
 							   FontSize="16"
 							   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
 					</RadioButton>
-					<RadioButton IsChecked="True" x:Name="ItemTab"
+					<RadioButton x:Name="ItemTab"
 								 Style="{StaticResource TabLikeRadioButtonStyleKey}">
 						<TextBlock Text="장비개발기록"
 							   FontFamily="{DynamicResource EmphaticFontFamilyKey}"
