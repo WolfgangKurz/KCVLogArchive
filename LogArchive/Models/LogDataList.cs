@@ -43,26 +43,29 @@ namespace LogArchive.Models
 	/// </summary>
 	public class ItemStringLists
 	{
+		public int Id { get; set; }
 		public string Date { get; set; }
-		public string Results { get; set; }
 		public string Assistant { get; set; }
 		public int Fuel { get; set; }
 		public int Steel { get; set; }
 		public int Bullet { get; set; }
-		public int bauxite { get; set; }
+		public int Bauxite { get; set; }
+		public string Results { get; set; }
 	}
 
 	/// <summary>
-	/// 날짜,결과,연료,탄,강재,보크사이트,개발자재
+	/// 날짜,비서함,연료,탄,강재,보크사이트,개발자재,결과
 	/// </summary>
 	public class BuildStirngLists
 	{
+		public int Id { get; set; }
 		public string Date { get; set; }
-		public string Results { get; set; }
+		public string Assistant { get; set; }
 		public int Fuel { get; set; }
 		public int Steel { get; set; }
 		public int Bullet { get; set; }
-		public int bauxite { get; set; }
+		public int Bauxite { get; set; }
 		public int UseItems { get; set; }
+		public string Results { get; set; }
 	}
 }

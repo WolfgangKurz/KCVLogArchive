@@ -8,29 +8,23 @@ using System.Windows.Data;
 
 namespace LogArchive.Views.Converters
 {
-	public class DateTimeToStringConverter : IValueConverter
+	public class StringToIntergerConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			DateTime time = (DateTime)value;
+			int integer = (int)value;
 
-			return $"{time.Year}-{time.Month}-{time.Day}";
+			return integer == 0 ? "" : integer.ToString();
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			string text = (string)value;
-			string[] dateText = text.Split('-');
+			int integer = 0;
 
-			int year = 0;
-			int month = 0;
-			int day = 0;
-			if (dateText.Count() == 3 && int.TryParse(dateText[0], out year) && int.TryParse(dateText[1], out month) && int.TryParse(dateText[2], out day))
-			{
-				return new DateTime(year, month, day);
-			}
+			int.TryParse(text, out integer);
 
-			return DateTime.Now;
+			return integer;
 		}
 	}
 }
