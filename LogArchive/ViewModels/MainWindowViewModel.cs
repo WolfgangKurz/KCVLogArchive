@@ -1391,8 +1391,8 @@ namespace LogArchive.ViewModels
 			items = ItemListFilter(items);
 			if (ReturnAll == true) return items;
 
-			int Page = 0;
-			for (int i = 0; i <= items.Count; i = i + 20)
+			int Page = 0, i = 0;
+			do
 			{
 				if (i + 20 < items.Count)
 				{
@@ -1400,7 +1400,9 @@ namespace LogArchive.ViewModels
 					Page++;
 				}
 				else pagingList.Add(items.GetRange(i, items.Count - Page * 20));
-			}
+
+				i = i + 20;
+			} while (i < items.Count);
 			this.ItemMaxPage = Page;
 			if (this.ItemPages >= ItemMaxPage) this.ItemPages = this.ItemMaxPage;
 			if (IsNavi) return pagingList[this.ItemPages];
@@ -1444,8 +1446,8 @@ namespace LogArchive.ViewModels
 			items = BuildListFilter(items);
 			if (ReturnAll == true) return items;
 
-			int Page = 0;
-			for (int i = 0; i <= items.Count; i = i + 20)
+			int Page = 0, i = 0;
+			do
 			{
 				if (i + 20 < items.Count)
 				{
@@ -1453,7 +1455,9 @@ namespace LogArchive.ViewModels
 					Page++;
 				}
 				else pagingList.Add(items.GetRange(i, items.Count - Page * 20));
-			}
+
+				i = i + 20;
+			} while (i < items.Count);
 			this.BuildMaxPage = Page;
 			if (this.BuildPages >= BuildMaxPage) this.BuildPages = this.BuildMaxPage;
 			if (IsNavi) return pagingList[this.BuildPages];
@@ -1497,8 +1501,8 @@ namespace LogArchive.ViewModels
 			items = DropListFilter(items);
 			if (ReturnAll == true) return items;
 
-			int Page = 0;
-			for (int i = 0; i <= items.Count; i = i + 20)
+			int Page = 0, i = 0;
+			do
 			{
 				if (i + 20 < items.Count)
 				{
@@ -1506,7 +1510,9 @@ namespace LogArchive.ViewModels
 					Page++;
 				}
 				else pagingList.Add(items.GetRange(i, items.Count - Page * 20));
-			}
+
+				i = i + 20;
+			} while (i < items.Count);
 			this.DropMaxPage = Page;
 			if (this.DropPages >= DropMaxPage) this.DropPages = this.DropMaxPage;
 			if (IsNavi) return pagingList[this.DropPages];
