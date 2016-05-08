@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -25,9 +26,16 @@ namespace LogArchive.Views.Converters
 			int year = 0;
 			int month = 0;
 			int day = 0;
-			if (dateText.Count() == 3 && int.TryParse(dateText[0], out year) && int.TryParse(dateText[1], out month) && int.TryParse(dateText[2], out day))
+			try
 			{
-				return new DateTime(year, month, day);
+				if (dateText.Count() == 3 && int.TryParse(dateText[0], out year) && int.TryParse(dateText[1], out month) && int.TryParse(dateText[2], out day))
+				{
+					return new DateTime(year, month, day);
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
 			}
 
 			return DateTime.Now;

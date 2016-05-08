@@ -309,9 +309,9 @@
 									<TextBlock Margin="0,3,0,0" Text="날짜 :" HorizontalAlignment="Right"/>
 									<WrapPanel Grid.Column="2">
 										<CheckBox IsChecked="{Binding Item_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
-										<metro:PromptTextBox IsEnabled="{Binding Item_DateRange, Mode=TwoWay}" Text="{Binding Item_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<metro:PromptTextBox IsEnabled="{Binding Item_DateRange, Mode=TwoWay}" Text="{Binding Item_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}}" Prompt="Ex) 2016-01-01"/>
 										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
-										<metro:PromptTextBox  IsEnabled="{Binding Item_DateRange, Mode=TwoWay}" Text="{Binding Item_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<metro:PromptTextBox  IsEnabled="{Binding Item_DateRange, Mode=TwoWay}" Text="{Binding Item_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}}" Prompt="Ex) 2016-01-01"/>
 
 									</WrapPanel>
 								</Grid>
@@ -598,9 +598,9 @@
 									<TextBlock Margin="0,3,0,0" Text="날짜 :" HorizontalAlignment="Right"/>
 									<WrapPanel Grid.Column="2">
 										<CheckBox IsChecked="{Binding Build_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
-										<metro:PromptTextBox IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<metro:PromptTextBox IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}}" Prompt="Ex) 2016-01-01"/>
 										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
-										<metro:PromptTextBox  IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<metro:PromptTextBox  IsEnabled="{Binding Build_DateRange, Mode=TwoWay}" Text="{Binding Build_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}}" Prompt="Ex) 2016-01-01"/>
 
 									</WrapPanel>
 								</Grid>
@@ -915,9 +915,9 @@
 									<TextBlock Margin="0,3,0,0" Text="날짜 :"/>
 									<WrapPanel Grid.Column="2">
 										<CheckBox IsChecked="{Binding Drop_DateRange, Mode=TwoWay}" Content="날짜 범위"/>
-										<metro:PromptTextBox IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<metro:PromptTextBox IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MinDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}}" Prompt="Ex) 2016-01-01"/>
 										<TextBlock Margin="0,3,0,0"  Text=" ~ "/>
-										<metro:PromptTextBox  IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt="Ex) 2016-01-01"/>
+										<metro:PromptTextBox  IsEnabled="{Binding Drop_DateRange, Mode=TwoWay}" Text="{Binding Drop_MaxDate, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}}" Prompt="Ex) 2016-01-01"/>
 
 									</WrapPanel>
 								</Grid>
