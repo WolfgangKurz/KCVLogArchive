@@ -188,6 +188,7 @@
 							   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
 					</RadioButton>
 					<RadioButton x:Name="DropTab"
+								 IsChecked="True"
 							 Style="{StaticResource TabLikeRadioButtonStyleKey}">
 						<TextBlock Text="드랍기록"
 							   FontFamily="{DynamicResource EmphaticFontFamilyKey}"
@@ -1088,16 +1089,6 @@
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
 										<TextBlock Text="드랍"/>
-									</GridViewColumnHeader>
-								</GridViewColumn>
-								<GridViewColumn Width="Auto">
-									<GridViewColumn.CellTemplate>
-										<DataTemplate>
-											<metro2:CallMethodButton Margin="1" Content="복사" MethodName="CopyBattleData" MethodParameter="{Binding Date}"/>
-										</DataTemplate>
-									</GridViewColumn.CellTemplate>
-									<GridViewColumnHeader>
-										<TextBlock Text="전투기록"/>
 									</GridViewColumnHeader>
 								</GridViewColumn>
 							</GridView>

@@ -23,19 +23,6 @@ namespace LogArchive.Models
 		public string EnemyFleet { get; set; }
 		public string Rank { get; set; }
 		public string Drop { get; set; }
-
-		public void CopyBattleData(string date)
-		{
-			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-
-			if (File.Exists(Path.Combine(MainFolder, "replaydata.json")))
-			{
-				JObject json = JObject.Parse(File.ReadAllText(Path.Combine(MainFolder, "replaydata.json")));
-
-				if (json[date] != null)
-					Clipboard.SetText(JsonConvert.SerializeObject((JObject)json[date]));
-			}
-		}
 	}
 
 	/// <summary>
