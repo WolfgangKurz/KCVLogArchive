@@ -700,9 +700,8 @@ namespace LogArchive.ViewModels
 
 		#region Drop_Nodes 변경 통지 프로퍼티
 
-		private List<int> _Drop_Nodes;
-
-		public List<int> Drop_Nodes
+		private List<string> _Drop_Nodes;
+		public List<string> Drop_Nodes
 		{
 			get { return this._Drop_Nodes; }
 			set
@@ -798,6 +797,40 @@ namespace LogArchive.ViewModels
 
 		#endregion
 
+		#region Drop_Item_Yes 변경 통지 프로퍼티
+		private bool _Drop_Item_Yes;
+		public bool Drop_Item_Yes
+		{
+			get { return this._Drop_Item_Yes; }
+			set
+			{
+				if (this._Drop_Item_Yes != value)
+				{
+					this._Drop_Item_Yes = value;
+					this.RaisePropertyChanged();
+					RefreshDrop(true);
+				}
+			}
+		}
+		#endregion
+
+		#region Drop_Item_No 변경 통지 프로퍼티
+		private bool _Drop_Item_No;
+		public bool Drop_Item_No
+		{
+			get { return this._Drop_Item_No; }
+			set
+			{
+				if (this._Drop_Item_No != value)
+				{
+					this._Drop_Item_No = value;
+					this.RaisePropertyChanged();
+					RefreshDrop(true);
+				}
+			}
+		}
+		#endregion
+
 		private string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 		public MainWindowViewModel()
@@ -814,12 +847,15 @@ namespace LogArchive.ViewModels
 
 			this._Drop_MinDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 			this._Drop_MaxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-			this._Drop_Nodes = new List<int>();
+			this._Drop_Nodes = new List<string>();
 			this._Drop_BossCheck = null;
 			this._Drop_RankS = true;
 			this._Drop_RankA = true;
 			this._Drop_RankB = true;
 			this._Drop_RankC = true;
+
+			this._Drop_Item_Yes = true;
+			this._Drop_Item_No = true;
 		}
 		public void csvtobin()
 		{
@@ -954,28 +990,25 @@ namespace LogArchive.ViewModels
 				foreach (var line in File.ReadAllLines(csvPath))
 				{
 					var parts = line.Split(',');
-					if (parts[0] != "날짜" && parts[6] != "")
-						items.Add(new DropStringLists
-						{
-							Date = parts[0],
-							SeaArea = parts[1],
-							MapInfo = parts[2],
-							Boss = parts[3],
-							EnemyFleet = parts[4],
-							Rank = parts[5],
-							Drop = parts[6],
-						});
-					else if (parts[0] != "날짜")
-						items.Add(new DropStringLists
-						{
-							Date = parts[0],
-							SeaArea = parts[1],
-							MapInfo = parts[2],
-							Boss = parts[3],
-							EnemyFleet = parts[4],
-							Rank = parts[5],
-							Drop = string.Empty,
-						});
+					var item = new DropStringLists
+					{
+						Date = parts[0],
+						SeaArea = parts[1],
+						MapInfo = parts[2],
+						Boss = parts[3],
+						EnemyFleet = parts[4],
+						Rank = parts[5],
+						Drop = string.Empty,
+						DropItem = string.Empty,
+					};
+
+					if (parts[0] != "날짜" && parts.Length >= 7 && parts[6] != "")
+						item.Drop = parts[6];
+
+					if (parts[0] != "날짜" && parts.Length >= 8 && parts[7] != "")
+						item.DropItem = parts[7];
+
+					items.Add(item);
 				}
 
 
@@ -993,6 +1026,7 @@ namespace LogArchive.ViewModels
 						writer.Write(item.EnemyFleet);
 						writer.Write(item.Rank);
 						writer.Write(item.Drop);
+						writer.Write(item.DropItem);
 					}
 					fileStream.Dispose();
 					fileStream.Close();
@@ -1041,7 +1075,8 @@ namespace LogArchive.ViewModels
 				elem.Length > 2 ? int.Parse(elem[2]) : 1,
 				elem.Length > 3 ? int.Parse(elem[3]) : 0,
 				elem.Length > 4 ? int.Parse(elem[4]) : 0,
-				elem.Length > 5 ? int.Parse(elem[5]) : 0);
+				elem.Length > 5 ? int.Parse(elem[5]) : 0
+			);
 		}
 
 		#region ItemLists 필터
@@ -1182,11 +1217,16 @@ namespace LogArchive.ViewModels
 			if (dropdata == null)
 				return null;
 
-			dropdata = dropdata.Where(x => !Drop_DateRange || (Drop_DateRange && DateTime.Compare(CSVStringToTime(x.Date), Drop_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Drop_MaxDate) <= 0))
-											.Where(x => DropRankCalc(x))
-											.Where(x => DropMapInfoCalc(x))
-											.Where(x => DropBossCalc(x))
-											.ToList();
+			dropdata = dropdata
+				.Where(
+					x => !Drop_DateRange
+					|| (Drop_DateRange && DateTime.Compare(CSVStringToTime(x.Date), Drop_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Drop_MaxDate) <= 0)
+				)
+				.Where(x => DropRankCalc(x))
+				.Where(x => DropMapInfoCalc(x))
+				.Where(x => DropBossCalc(x))
+				.Where(x => DropBItemCalc(x))
+				.ToList();
 
 			int count = 1;
 			foreach (var drop in dropdata)
@@ -1223,8 +1263,23 @@ namespace LogArchive.ViewModels
 			string[] mapText = dropdata.MapInfo.Split('-');
 
 			if (int.TryParse(mapText[0], out dropworld) && int.TryParse(mapText[1], out dropmap) && int.TryParse(mapText[2], out dropnode))
-				if ((Drop_World == 0 || dropworld == Drop_World) && (Drop_Map == 0 || dropmap == Drop_Map) && (Drop_BossCheck == true || Drop_Nodes.Count == 0 || Drop_Nodes.Any(x => dropnode == x)))
-					return true;
+				if ((Drop_World == 0 || dropworld == Drop_World) && (Drop_Map == 0 || dropmap == Drop_Map))
+				{
+					if (Drop_BossCheck == true || Drop_Nodes.Count == 0)
+						return true;
+
+					foreach (var node in Drop_Nodes)
+					{
+						int _node;
+						if (int.TryParse(node, out _node))
+						{
+							if (_node == dropnode)
+								return true;
+						}
+						else
+							return NodeInfoData.NodeList.Any(x => x.Display == node);
+					}
+				}
 
 			return false;
 		}
@@ -1237,6 +1292,18 @@ namespace LogArchive.ViewModels
 			if (Drop_BossCheck == null) return true;
 			if (Drop_BossCheck == true && dropdata.Boss == "O") return true;
 			if (Drop_BossCheck == false && dropdata.Boss == "X") return true;
+
+			return false;
+		}
+
+		/// <summary>
+		/// 해당 드랍 데이터가 아이템 드랍 조건을 만족하고 있는지를 구합니다.
+		/// </summary>
+		public bool DropBItemCalc(DropStringLists dropdata)
+		{
+			if (Drop_Item_Yes && Drop_Item_No) return true;
+			if (Drop_Item_Yes == true && dropdata.DropItem != string.Empty) return true;
+			if (Drop_Item_No == true && dropdata.DropItem == string.Empty) return true;
 
 			return false;
 		}
@@ -1343,12 +1410,12 @@ namespace LogArchive.ViewModels
 
 			StringBuilder text = new StringBuilder();
 
-			text.AppendLine("No.,날짜,해역이름,해역,보스,적 함대,랭크,드랍");
+			text.AppendLine("No.,날짜,해역이름,해역,보스,적 함대,랭크,드랍,아이템");
 
 			int count = 1;
 			foreach (var drop in droplist)
 			{
-				text.AppendLine($"{count},{drop.Date},{drop.SeaArea},{drop.MapInfo},{drop.Boss},{drop.EnemyFleet},{drop.Rank},{drop.Drop}");
+				text.AppendLine($"{count},{drop.Date},{drop.SeaArea},{drop.MapInfo},{drop.Boss},{drop.EnemyFleet},{drop.Rank},{drop.Drop},{drop.DropItem}");
 				count++;
 			}
 
@@ -1488,6 +1555,7 @@ namespace LogArchive.ViewModels
 						EnemyFleet = reader.ReadString(),
 						Rank = reader.ReadString(),
 						Drop = reader.ReadString(),
+						DropItem = reader.ReadString(),
 					};
 					//item.SeaArea = KanColleClient.Current.Translations.GetTranslation(item.SeaArea, TranslationType.OperationMaps, true);
 					//item.EnemyFleet = KanColleClient.Current.Translations.GetTranslation(item.EnemyFleet, TranslationType.OperationSortie, true);

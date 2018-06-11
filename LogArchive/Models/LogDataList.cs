@@ -23,6 +23,26 @@ namespace LogArchive.Models
 		public string EnemyFleet { get; set; }
 		public string Rank { get; set; }
 		public string Drop { get; set; }
+		public string DropItem { get; set; }
+
+		public string MapDisplay
+		{
+			get
+			{
+				var part = this.MapInfo.Split('-');
+				var display = NodeInfoData.NodeList
+					.FirstOrDefault(x =>
+						x.World.ToString() == part[0]
+						&& x.Map.ToString() == part[1]
+						&& x.Node.ToString() == part[2]
+					)
+					?.Display;
+
+				return display == null
+					? this.MapInfo
+					: string.Format("{0}-{1}-{2}", part[0], part[1], display);
+			}
+		}
 	}
 
 	/// <summary>
