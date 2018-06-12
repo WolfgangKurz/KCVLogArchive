@@ -1152,7 +1152,7 @@
 						</metro2:CallMethodButton>
 						<metro:PromptTextBox Grid.Column="1"
 								 Prompt=""
-								 Width="30"
+								 MinWidth="30"
 								 Margin="10,0">
 							<metro:PromptTextBox.Text>
 								<Binding Path="DropPages"
