@@ -1021,13 +1021,16 @@ namespace LogArchive.ViewModels
 						DropItem = string.Empty,
 					};
 
-					if (parts[0] != "날짜" && parts.Length >= 7 && parts[6] != "")
-						item.Drop = parts[6];
+					if (parts[0] != "날짜")
+					{
+						if (parts.Length >= 7 && parts[6] != "")
+							item.Drop = parts[6];
 
-					if (parts[0] != "날짜" && parts.Length >= 8 && parts[7] != "")
-						item.DropItem = parts[7];
+						if (parts.Length >= 8 && parts[7] != "")
+							item.DropItem = parts[7];
 
-					items.Add(item);
+						items.Add(item);
+					}
 				}
 
 
@@ -1578,6 +1581,7 @@ namespace LogArchive.ViewModels
 						Drop = reader.ReadString(),
 						DropItem = reader.ReadString(),
 					};
+
 					//item.SeaArea = KanColleClient.Current.Translations.GetTranslation(item.SeaArea, TranslationType.OperationMaps, true);
 					//item.EnemyFleet = KanColleClient.Current.Translations.GetTranslation(item.EnemyFleet, TranslationType.OperationSortie, true);
 					items.Add(item);
