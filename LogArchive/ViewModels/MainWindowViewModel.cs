@@ -831,11 +831,30 @@ namespace LogArchive.ViewModels
 		}
 		#endregion
 
+		#region PageCount 변경 통지 프로퍼티
+		private int _PageCount { get; set; }
+		public int PageCount
+		{
+			get { return this._PageCount; }
+			set
+			{
+				if(this._PageCount != value)
+				{
+					this._PageCount = Math.Max(1, Math.Min(1000, value));
+					this.RaisePropertyChanged();
+					RefreshDrop(true);
+				}
+			}
+		}
+		#endregion
+
 		private string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 		public MainWindowViewModel()
 		{
 			this.Title = "제독업무도 바빠! 기록열람";
+
+			this._PageCount = 20;
 
 			this._Item_MinDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 			this._Item_MaxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
@@ -1277,7 +1296,9 @@ namespace LogArchive.ViewModels
 								return true;
 						}
 						else
-							return NodeInfoData.NodeList.Any(x => x.Display == node);
+							return NodeInfoData.NodeList
+								.FirstOrDefault(x => x.World == dropworld && x.Map == dropmap && x.Node == dropnode)
+								?.Display == node;
 					}
 				}
 
@@ -1461,14 +1482,14 @@ namespace LogArchive.ViewModels
 			int Page = 0, i = 0;
 			do
 			{
-				if (i + 20 < items.Count)
+				if (i + PageCount < items.Count)
 				{
-					pagingList.Add(items.GetRange(i, 20));
+					pagingList.Add(items.GetRange(i, PageCount));
 					Page++;
 				}
-				else pagingList.Add(items.GetRange(i, items.Count - Page * 20));
+				else pagingList.Add(items.GetRange(i, items.Count - Page * PageCount));
 
-				i = i + 20;
+				i = i + PageCount;
 			} while (i < items.Count);
 			this.ItemMaxPage = Page;
 			if (this.ItemPages >= ItemMaxPage) this.ItemPages = this.ItemMaxPage;
@@ -1516,14 +1537,14 @@ namespace LogArchive.ViewModels
 			int Page = 0, i = 0;
 			do
 			{
-				if (i + 20 < items.Count)
+				if (i + PageCount < items.Count)
 				{
-					pagingList.Add(items.GetRange(i, 20));
+					pagingList.Add(items.GetRange(i, PageCount));
 					Page++;
 				}
-				else pagingList.Add(items.GetRange(i, items.Count - Page * 20));
+				else pagingList.Add(items.GetRange(i, items.Count - Page * PageCount));
 
-				i = i + 20;
+				i = i + PageCount;
 			} while (i < items.Count);
 			this.BuildMaxPage = Page;
 			if (this.BuildPages >= BuildMaxPage) this.BuildPages = this.BuildMaxPage;
@@ -1572,14 +1593,14 @@ namespace LogArchive.ViewModels
 			int Page = 0, i = 0;
 			do
 			{
-				if (i + 20 < items.Count)
+				if (i + PageCount < items.Count)
 				{
-					pagingList.Add(items.GetRange(i, 20));
+					pagingList.Add(items.GetRange(i, PageCount));
 					Page++;
 				}
-				else pagingList.Add(items.GetRange(i, items.Count - Page * 20));
+				else pagingList.Add(items.GetRange(i, items.Count - Page * PageCount));
 
-				i = i + 20;
+				i = i + PageCount;
 			} while (i < items.Count);
 			this.DropMaxPage = Page;
 			if (this.DropPages >= DropMaxPage) this.DropPages = this.DropMaxPage;

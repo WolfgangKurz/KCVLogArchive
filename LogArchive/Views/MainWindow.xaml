@@ -80,16 +80,11 @@
 							<ControlTemplate.Triggers>
 								<MultiTrigger>
 									<MultiTrigger.Conditions>
-										<Condition Property="IsChecked"
-												   Value="False" />
-										<Condition Property="IsMouseOver"
-												   Value="False" />
-										<Condition Property="IsPressed"
-												   Value="False" />
+										<Condition Property="IsChecked" Value="False" />
+										<Condition Property="IsMouseOver" Value="False" />
+										<Condition Property="IsPressed" Value="False" />
 									</MultiTrigger.Conditions>
-									<Setter TargetName="Arrow"
-											Property="Visibility"
-											Value="Hidden" />
+									<Setter TargetName="Arrow" Property="Visibility" Value="Hidden" />
 								</MultiTrigger>
 							</ControlTemplate.Triggers>
 						</ControlTemplate>
@@ -219,30 +214,32 @@
 							</Paragraph>
 							<Paragraph Language="ko-KR">
 								<Run Text="Project home:" />
-								<metro2:HyperlinkEx Uri="http://kcvkr.tistory.com/">
-									<Run Text="http://kcvkr.tistory.com/" />
+								<metro2:HyperlinkEx Uri="https://github.com/WolfgangKurz/KCVLogArchive/">
+									<Run Text="https://github.com/WolfgangKurz/KCVLogArchive/" />
 								</metro2:HyperlinkEx>
 								<LineBreak />
 								<Run Text="업데이트 링크:" />
-								<metro2:HyperlinkEx Uri="https://github.com/FreyYa/KCVLogArchive/releases">
-									<Run Text="https://github.com/FreyYa/KCVLogArchive/releases" />
+								<metro2:HyperlinkEx Uri="https://github.com/WolfgangKurz/KCVLogArchive/releases">
+									<Run Text="https://github.com/WolfgangKurz/KCVLogArchive/releases" />
 								</metro2:HyperlinkEx>
 								<LineBreak />
 								<Run Text="Source code:" />
-								<metro2:HyperlinkEx Uri="https://github.com/FreyYa/KCVLogArchive">
-									<Run Text="https://github.com/FreyYa/KCVLogArchive" />
+								<metro2:HyperlinkEx Uri="https://github.com/WolfgangKurz/KCVLogArchive">
+									<Run Text="https://github.com/WolfgangKurz/KCVLogArchive" />
 								</metro2:HyperlinkEx>
 								<LineBreak />
 								<Run Text="Origin:" />
-								<metro2:HyperlinkEx Uri="https://github.com/Grabacr07/KanColleViewer">
-									<Run Text="https://github.com/Grabacr07/KanColleViewer" />
+								<metro2:HyperlinkEx Uri="https://github.com/CirnoV/KanColleViewer">
+									<Run Text="https://github.com/CirnoV/KanColleViewer" />
 								</metro2:HyperlinkEx>
+								<!--
 								<LineBreak />
 								<LineBreak />
 								<Run Text="전투 리플레이:" />
 								<metro2:HyperlinkEx Uri="http://kc3kai.github.io/kancolle-replay/battleplayer.html">
 									<Run Text="http://kc3kai.github.io/kancolle-replay/battleplayer.html" />
 								</metro2:HyperlinkEx>
+								-->
 							</Paragraph>
 						</FlowDocument>
 					</FlowDocumentScrollViewer>
@@ -336,6 +333,20 @@
 										<TextBlock Margin="0,3,0,0" Text=" / "/>
 										<metro:PromptTextBox Text="{Binding Item_Bauxite, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}" Prompt=" 보키 "/>
 									</WrapPanel>
+								</Grid>
+
+								<Grid Margin="0,2,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="Auto" />
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,2,0,0" Text="페이지 당 표시 갯수 :"/>
+									<metro:PromptTextBox Grid.Column="2"
+														 Text="{Binding PageCount, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}"
+														 MinWidth="40"
+														 Prompt=""/>
 								</Grid>
 							</StackPanel>
 
@@ -507,7 +518,7 @@
 						</metro2:CallMethodButton>
 						<metro:PromptTextBox Grid.Column="1"
 								 Prompt=""
-								 Width="30"
+								 MinWidth="30"
 								 Margin="10,0">
 							<metro:PromptTextBox.Text>
 								<Binding Path="ItemPages"
@@ -627,6 +638,20 @@
 										<CheckBox IsThreeState="True" Margin="15,0,0,0" IsChecked="{Binding Build_LargeShip, Mode=TwoWay}" Content="대형함 건조"/>
 									</WrapPanel>
 								</Grid>
+
+								<Grid Margin="0,2,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="Auto" />
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,2,0,0" Text="페이지 당 표시 갯수 :"/>
+									<metro:PromptTextBox Grid.Column="2"
+														 Text="{Binding PageCount, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}"
+														 MinWidth="40"
+														 Prompt=""/>
+								</Grid>
 							</StackPanel>
 
 							<StackPanel>
@@ -643,7 +668,7 @@
 										<metro:PromptTextBox Text="{Binding Build_Assistant, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Prompt=" 비서함 검색 "/>
 									</WrapPanel>
 								</Grid>
-								
+
 								<Grid>
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="Auto" 
@@ -823,12 +848,12 @@
 							</Viewbox>
 						</metro2:CallMethodButton>
 						<metro:PromptTextBox Grid.Column="1"
-								 Prompt=""
-								 Width="30"
-								 Margin="10,0">
+											 Prompt=""
+											 MinWidth="30"
+											 Margin="10,0">
 							<metro:PromptTextBox.Text>
 								<Binding Path="BuildPages"
-							 UpdateSourceTrigger="PropertyChanged">
+										 UpdateSourceTrigger="PropertyChanged">
 									<Binding.ValidationRules>
 										<metro:Int32Rule Min="0"/>
 									</Binding.ValidationRules>
@@ -940,6 +965,20 @@
 										<CheckBox IsChecked="{Binding Drop_RankC, Mode=TwoWay}" Content="패배"/>
 									</WrapPanel>
 								</Grid>
+
+								<Grid Margin="0,2,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="Auto" />
+									</Grid.ColumnDefinitions>
+
+									<TextBlock Margin="0,2,0,0" Text="페이지 당 표시 갯수 :"/>
+									<metro:PromptTextBox Grid.Column="2"
+														 Text="{Binding PageCount, Mode=TwoWay, Converter={StaticResource StringToIntergerConverter}, UpdateSourceTrigger=PropertyChanged}"
+														 MinWidth="40"
+														 Prompt=""/>
+								</Grid>
 							</StackPanel>
 
 							<StackPanel>
@@ -1041,7 +1080,8 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Id}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding Id}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1051,7 +1091,8 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Date}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding Date}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1061,7 +1102,8 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding SeaArea}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding SeaArea}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1083,7 +1125,25 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Boss}"/>
+											<!-- <TextBlock Margin="6,3,0,3" Text="{Binding Boss}"/> -->
+											<Path Width="16"
+												  Height="16"
+												  HorizontalAlignment="Center"
+												  Stretch="Uniform"
+												  Data="M227.24 283.65C228.57 290.93 227.58 298.44 224.43 305.13C221.38 311.6 225.4 303.08 224.43 305.13C215.33 324.41 219.72 347.35 235.28 361.92C249.41 375.13 231.64 358.51 237.26 363.76C276 400.01 336.11 400.35 375.25 364.53C379.93 360.26 363.32 375.45 377.67 362.32C390.42 350.66 395.1 332.59 389.64 316.2C388.21 311.93 390.63 319.18 388.63 313.19C384.61 301.15 383.66 288.3 385.87 275.8C387.22 268.13 386.75 270.82 387.8 264.81C390.91 247.18 387.5 229.01 378.21 213.71C376.6 211.06 379.91 216.52 376.74 211.28C374.24 207.16 368.03 208 366.71 212.64C364.73 219.59 361 232.73 358.7 240.79C357.48 245.08 354.85 248.84 351.24 251.45C349.56 252.66 352.35 250.64 351.24 251.45C346.11 255.15 339.34 255.61 333.76 252.65C328.18 249.69 335.58 253.62 333.76 252.65C316.3 243.39 295.42 243.26 277.85 252.3C274.54 254.01 279.01 251.71 272.28 255.17C266.5 258.15 259.42 255.29 257.32 249.13C254 239.4 248.42 223.05 245.2 213.6C243.44 208.44 236.43 207.71 233.65 212.41C230.68 217.42 235.06 210.02 233.65 212.41C224.08 228.56 220.67 247.62 224.04 266.09C225.09 271.84 225.56 274.41 227.24 283.65Z"
+												  Fill="#FFCF2121"
+												  Margin="2">
+												<Path.Style>
+													<Style TargetType="{x:Type Path}">
+														<Setter Property="Visibility" Value="Visible" />
+														<Style.Triggers>
+															<DataTrigger Binding="{Binding Boss, Mode=OneWay}" Value="X">
+																<Setter Property="Visibility" Value="Collapsed" />
+															</DataTrigger>
+														</Style.Triggers>
+													</Style>
+												</Path.Style>
+											</Path>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1093,7 +1153,8 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding EnemyFleet}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding EnemyFleet}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1103,7 +1164,34 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Rank}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding Rank}"
+													   FontWeight="ExtraBold">
+												<TextBlock.Style>
+													<Style TargetType="{x:Type TextBlock}">
+														<Style.Triggers>
+															<DataTrigger Binding="{Binding Rank}" Value="S">
+																<Setter Property="Foreground" Value="Gold"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Rank}" Value="A">
+																<Setter Property="Foreground" Value="#FFD10000"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Rank}" Value="B">
+																<Setter Property="Foreground" Value="#FFD43353"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Rank}" Value="C">
+																<Setter Property="Foreground" Value="#FF42428F"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Rank}" Value="D">
+																<Setter Property="Foreground" Value="#FF42428F"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Rank}" Value="E">
+																<Setter Property="Foreground" Value="#FF42428F"/>
+															</DataTrigger>
+														</Style.Triggers>
+													</Style>
+												</TextBlock.Style>
+											</TextBlock>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1113,7 +1201,8 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding Drop}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding Drop}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1123,7 +1212,8 @@
 								<GridViewColumn Width="Auto">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-											<TextBlock Margin="6,3,0,3" Text="{Binding DropItem}"/>
+											<TextBlock Margin="6,3,0,3"
+													   Text="{Binding DropItem}"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 									<GridViewColumnHeader>
@@ -1133,7 +1223,9 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
-					<Grid Grid.Row="3" HorizontalAlignment="Center" Margin="0,10,0,0">
+					<Grid Grid.Row="3"
+						  HorizontalAlignment="Center"
+						  Margin="0,10,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition/>
 							<ColumnDefinition/>
@@ -1141,22 +1233,22 @@
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
 						<metro2:CallMethodButton MethodName="DropGoBack"
-								 Height="30"
-								 Style="{DynamicResource CircleButtonStyleKey}"
-								 ToolTip="전 페이지로 이동">
+												 Height="30"
+												 Style="{DynamicResource CircleButtonStyleKey}"
+												 ToolTip="전 페이지로 이동">
 							<Viewbox Margin="5">
 								<Path Data="M17.358398,14.795208 L22.22168,14.795208 L17.109375,20.0247 L28.227539,20.0247 L28.227539,23.657513 L17.109375,23.657513 L22.22168,28.887005 L17.358398,28.887005 L10.649414,21.870403 L10.649414,21.81181 z"
-					  Stretch="Uniform"
-					  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
+									  Stretch="Uniform"
+									  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}" />
 							</Viewbox>
 						</metro2:CallMethodButton>
 						<metro:PromptTextBox Grid.Column="1"
-								 Prompt=""
-								 MinWidth="30"
-								 Margin="10,0">
+											 Prompt=""
+											 MinWidth="30"
+											 Margin="10,0">
 							<metro:PromptTextBox.Text>
 								<Binding Path="DropPages"
-							 UpdateSourceTrigger="PropertyChanged">
+										 UpdateSourceTrigger="PropertyChanged">
 									<Binding.ValidationRules>
 										<metro:Int32Rule Min="0"/>
 									</Binding.ValidationRules>
@@ -1165,7 +1257,9 @@
 
 						</metro:PromptTextBox>
 
-						<TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0">
+						<TextBlock Grid.Column="2"
+								   VerticalAlignment="Center"
+								   Margin="0,0,10,0">
 							<Run Text="/"/>
 							<Run Text="{Binding DropMaxPage}"/>
 						</TextBlock>
@@ -1188,7 +1282,6 @@
 		<Grid Grid.Row="2"
 			  Background="{DynamicResource AccentBrushKey}"
 			  Panel.ZIndex="100">
-
 		</Grid>
 	</Grid>
 </metro:MetroWindow>
