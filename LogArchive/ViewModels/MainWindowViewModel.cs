@@ -1086,31 +1086,24 @@ namespace LogArchive.ViewModels
 			if (this.DropPages + 1 <= DropMaxPage) this.DropPages++;
 		}
 
-		public DateTime CSVStringToTime(string str)
-		{
-			string[] elem = str.Split("- :".ToCharArray());
-
-			// Excel様が *うっかり* データを破損させることがあるので対応
-			return new DateTime(
-				elem.Length > 0 ? int.Parse(elem[0]) : 1970,
-				elem.Length > 1 ? int.Parse(elem[1]) : 1,
-				elem.Length > 2 ? int.Parse(elem[2]) : 1,
-				elem.Length > 3 ? int.Parse(elem[3]) : 0,
-				elem.Length > 4 ? int.Parse(elem[4]) : 0,
-				elem.Length > 5 ? int.Parse(elem[5]) : 0
-			);
-		}
-
 		#region ItemLists 필터
 		public List<ItemStringLists> ItemListFilter(List<ItemStringLists> itemdata)
 		{
 			if (itemdata == null)
 				return null;
 
-			itemdata = itemdata.Where(x => !Item_DateRange || (Item_DateRange && DateTime.Compare(CSVStringToTime(x.Date), Item_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Item_MaxDate) <= 0))
-											.Where(x => ItemAssistantCheck(x))
-											.Where(x => ItemRecipeCheck(x))
-											.ToList();
+			itemdata = itemdata
+				.Where(
+					x => !Item_DateRange
+					|| (
+						Item_DateRange
+						&& DateTime.Compare(Extensions.CSVStringToTime(x.Date), Item_MinDate) >= 0
+						&& DateTime.Compare(Extensions.CSVStringToTime(x.Date), Item_MaxDate) <= 0
+					)
+				)
+				.Where(x => ItemAssistantCheck(x))
+				.Where(x => ItemRecipeCheck(x))
+				.ToList();
 
 			int count = 1;
 			foreach (var item in itemdata)
@@ -1154,12 +1147,20 @@ namespace LogArchive.ViewModels
 			if (builddata == null)
 				return null;
 
-			builddata = builddata.Where(x => !Build_DateRange || (Build_DateRange && DateTime.Compare(CSVStringToTime(x.Date), Build_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Build_MaxDate) <= 0))
-											.Where(x => BuildAssistantCheck(x))
-											.Where(x => BuildRecipeCheck(x))
-											.Where(x => BuildItemCheck(x))
-											.Where(x => BuildLargeShipCheck(x))
-											.ToList();
+			builddata = builddata
+				.Where(
+					x => !Build_DateRange
+					|| (
+						Build_DateRange
+						&& DateTime.Compare(Extensions.CSVStringToTime(x.Date), Build_MinDate) >= 0
+						&& DateTime.Compare(Extensions.CSVStringToTime(x.Date), Build_MaxDate) <= 0
+					)
+				)
+				.Where(x => BuildAssistantCheck(x))
+				.Where(x => BuildRecipeCheck(x))
+				.Where(x => BuildItemCheck(x))
+				.Where(x => BuildLargeShipCheck(x))
+				.ToList();
 
 			int count = 1;
 			foreach (var build in builddata)
@@ -1242,7 +1243,11 @@ namespace LogArchive.ViewModels
 			dropdata = dropdata
 				.Where(
 					x => !Drop_DateRange
-					|| (Drop_DateRange && DateTime.Compare(CSVStringToTime(x.Date), Drop_MinDate) >= 0 && DateTime.Compare(CSVStringToTime(x.Date), Drop_MaxDate) <= 0)
+					|| (
+						Drop_DateRange
+						&& DateTime.Compare(Extensions.CSVStringToTime(x.Date), Drop_MinDate) >= 0
+						&& DateTime.Compare(Extensions.CSVStringToTime(x.Date), Drop_MaxDate) <= 0
+					)
 				)
 				.Where(x => DropRankCalc(x))
 				.Where(x => DropMapInfoCalc(x))
@@ -1298,10 +1303,13 @@ namespace LogArchive.ViewModels
 							if (_node == dropnode)
 								return true;
 						}
-						else
-							return NodeInfoData.NodeList
+						else {
+							var date = Extensions.CSVStringToTime(dropdata.Date);
+
+							return (date < new DateTime(2018, 08, 17, 0, 0, 0, DateTimeKind.Utc) ? NodeInfoData.OldNodeList : NodeInfoData.NodeList)
 								.FirstOrDefault(x => x.World == dropworld && x.Map == dropmap && x.Node == dropnode)
 								?.Display == node;
+						}
 					}
 				}
 

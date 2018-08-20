@@ -30,7 +30,12 @@ namespace LogArchive.Models
 			get
 			{
 				var part = this.MapInfo.Split('-');
-				var display = NodeInfoData.NodeList
+				var display = "???";
+
+				var date = Extensions.CSVStringToTime(this.Date);
+
+				// 1기 노드와 2기 노드를 구분
+				display = (date < new DateTime(2018, 08, 17, 0, 0, 0, DateTimeKind.Utc) ? NodeInfoData.OldNodeList : NodeInfoData.NodeList)
 					.FirstOrDefault(x =>
 						x.World.ToString() == part[0]
 						&& x.Map.ToString() == part[1]
